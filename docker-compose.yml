@@ -1,0 +1,43 @@
+version: '3'
+services:
+  prisma:
+    image: prismagraphql/prisma:1.14
+    restart: always
+    ports:
+    - "4466:4466"
+    environment:
+      PRISMA_CONFIG: |
+        managementApiSecret: my-server-secret-123
+        port: 4466
+        databases:
+          default:
+            connector: mysql  # or `postgres`
+            migrations: true
+            host: db
+            port: 3306        # or `5432` for `postgres`
+            user: root
+            password: prisma
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: prisma
+    volumes:
+      - mysql:/var/lib/mysql
+  graphql:
+    build: ./server
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./server:/usr/src/app
+    depends_on:
+      - db
+      - prisma
+  web:
+      build: .
+      ports:
+        - "3000:3000"
+      volumes:
+        - .:/code
+volumes:
+  mysql:
