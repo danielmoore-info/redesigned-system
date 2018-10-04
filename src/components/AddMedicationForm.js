@@ -10,27 +10,43 @@ const AddMedicationForm = ({addMedication=f=>f}) => {
   }
 
   return(
-    <form onSubmit={submit}>
-      <div className="form-group">
-        <label htmlFor="medicationNameInput">Name</label>
-        <input
-          ref={input => _name = input}
-          type="text"
-          className="form-control"
-          id="medicationNameInput"
-        />
+  <div className="col-md-4 margin-bottom">
+    <div className="list-card">
+      <div className="card-body">
+        <div>
+          <form onSubmit={submit}>
+            <input
+              ref={input => _name = input}
+              type="text"
+              className="form-input-field"
+              autocomplete="off" 
+              autocorrect="off" 
+              autocapitalize="off" 
+              spellcheck="false"
+              placeholder="Medication name..."
+            />
+            <input
+              ref={input => _count = input}
+              type="number"
+              className="form-input-field smaller"
+              autocomplete="off" 
+              autocorrect="off" 
+              autocapitalize="off" 
+              spellcheck="false"
+              placeholder="Number of tablets"
+            />
+              <div id="button-bar" className="">
+                <button className="btn list-card-button off-green" onClick={this.deleteMedication}>
+                  <i
+                    className="fas fa-plus"
+                  ></i>
+                </button>
+              </div> 
+          </form>
+        </div>
       </div>
-      <div className="form-group">
-        <label htmlFor="medicationCountInput">Count</label>
-        <input
-          ref={input => _count = input}
-          type="number"
-          className="form-control"
-          id="medicationCountInput"
-        />
-      </div>
-      <button className="btn btn-primary">Add</button>
-    </form>
+    </div>
+  </div>
   )
 }
 

@@ -120,7 +120,7 @@ background-color: #2E2032;
 
 
 .list-card-button {
-  border-radius: 15px;
+  border-radius: 50px;
   line-height: 1.5;
   font-size: 1rem;
   font-weight: 400;
@@ -138,7 +138,7 @@ background-color: #2E2032;
 }
 
 .marone {
-  background-color: #4F2F37;
+  background-color: rgb(121, 28, 28);
   color: white;
 }
 
@@ -174,4 +174,15 @@ background-color: #2E2032;
 
 #button-bar button {
   margin-right: 10px;
+}
+
+.card-body div input {
+  color: #212529;
+  border-radius: 0%;
+  border: none;
+  font-size: 1.3rem;
+  padding: 0 0;
+}
+.card-body div .smaller {
+  font-size: 1rem;
 }

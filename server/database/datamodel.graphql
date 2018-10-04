@@ -21,7 +21,7 @@ type User {
 type Medication {
   patient: User!
   id: ID! @unique
-  name: String! @unique
+  name: String!
   count: Int!
   schedules: [Schedule!]!
 }

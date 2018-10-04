@@ -4,6 +4,16 @@ const Subscription = {
       return ctx.db.subscription.post({}, info)
     },
   },
+  medicationUpdated: {
+    subscribe: (parent, args, ctx, info) => {
+      return ctx.db.subscription.medication(
+        {where: {
+          mutation_in: ['UPDATED']
+        }},
+        info
+      )
+    }
+  }
 }
 
 // This is the same subscription as above but only fires for 

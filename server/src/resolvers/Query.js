@@ -34,7 +34,10 @@ const Query = {
         id
       }
     }
-    return ctx.db.query.medications({where}, info)
+    return ctx.db.query.medications({
+      where,
+      orderBy:'updatedAt_DESC'
+    }, info)
   },
 
   schedules(parent, args, ctx, info) {
@@ -42,9 +45,11 @@ const Query = {
     const where = {
       patient: {
         id
-      }
+      },
     }
-    return ctx.db.query.schedules({where}, info)
+    return ctx.db.query.schedules({
+      where
+    }, info)
   }
 }
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Medication from './Medication'
 import AddMedicationForm from './AddMedicationForm'
-import { graphql } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import { gql } from 'apollo-boost'
 // import {API_ENDPOINT} from '../Constants'
 
@@ -10,41 +10,24 @@ class MedicationList extends Component {
     super(props)
     this.state = {
       error: null,
-      isLoaded: false,
+      loading: false,
       medications: [],
       showAddForm: false,
       query: '',
       patients: []
     }
-    this.onNameChange = this.onNameChange.bind(this)
-    this.onCountChange = this.onCountChange.bind(this)
-    // this.deleteMedication = this.deleteMedication.bind(this)
     this.showMedicationForm = this.showMedicationForm.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
+    this.addMedication = this.addMedication.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.location.key !== nextProps.location.key) {
       this.props.draftsQuery.refetch()
-    }
+    } true
   }
 
 
-  addPatient(id, patient) {
-    console.log(patient)
-  }
-
-  onNameChange(id, name) {
-    const medications = this.state.medications.map(medication =>
-      (medication.id !== id) ?
-        medication :
-        {
-          ...medication,
-          name
-        }
-    )
-    this.setState({ medications })
-  }
 
   handleSearch(e) {
     this.setState({
@@ -52,56 +35,59 @@ class MedicationList extends Component {
     })
   }
 
-  // deleteMedication(e, id) {
-  //   e.preventDefault()
-  //   fetch(API_ENDPOINT+'/medications/'+id, {
-  //     method: 'DELETE',
-  //     headers: {'Content-Type': 'application/json'}
-  //   }).then(
-  //     (response) => {
-  //       if(response.ok) {
-  //         const medications = this.state.medications.filter(
-  //           medication => medication.id !== id
-  //         )
-  //         this.setState({
-  //           medications
-  //         })
-  //       }
-  //     }
-  //   ).catch(err => {
-  //     this.setState({
-  //       isLoaded:true
-  //     })
-  //   })
-  // }
-
-  onCountChange(id, count) {
-    const medications = this.state.medications.map(medication =>
-      (medication.id !== id) ?
-        medication :
-        {
-          ...medication,
-          count
+  addMedication(name, count) {
+    this.setState({
+      loading: true
+    })
+    this.props.addMedication({
+      variables: {
+        name,
+        count
+      },
+      update: (store, { data: { createMedication } }) => {
+        const data = store.readQuery({ query: MEDICATION_QUERY })
+        data.medications.unshift(createMedication)
+        store.writeQuery({query: MEDICATION_QUERY, data})
+      }
+    })
+      .then(
+        result => {
+          this.setState({
+            loading: false,
+            showAddForm: false
+          })
         }
-    )
-    this.setState({ medications })
+      ).catch(err => {
+        this.setState({
+          error: true,
+          loading: false
+        })
+      })
   }
 
+  _subsribeToChanges = subscribeToMore => {
+    subscribeToMore({
+      document: MEDICATION_CHANGES_SUBSCRIPTION
+    })
+  }
+
+
   showMedicationForm() {
-    this.setState({ showAddForm: true })
+    this.setState({ showAddForm: !this.state.showAddForm })
   }
 
   render() {
     const { onNameChange } = this
     const { error, isLoaded, medications, showAddForm, query } = this.state
-
+    const {subscribeToMore} = this.props.medicationQuery
+    this._subsribeToChanges(subscribeToMore)
     return (
       <div className="container">
         <div className="row margin-bottom function-card">
-          <div className="col-md-6 offset-md-3">
+          <div className="col-md-10 offset-md-1">
             <button
               onClick={this.showMedicationForm}
-              className="btn list-card-button margin-bottom"
+              className="btn list-card-button off-green margin-bottom"
             >
               <i className="fas fa-plus"></i>
             </button>
@@ -113,45 +99,40 @@ class MedicationList extends Component {
             />
           </div>
         </div>
-        <div className="col-md-4">
-        </div>
         <div className="row">
+          {showAddForm ? (
+            <AddMedicationForm addMedication={this.addMedication} />
+          ) : (null)}
           {this.props.medicationQuery.medications &&
             this.props.medicationQuery.medications.map(medication => {
-              return(medication.name.toLowerCase().search(query.toLowerCase()) !== -1) ?
-              (
-                <Medication
-                  key={medication.id} {...medication}
-                  onNameChange={(name) => onNameChange(medication.id, name)}
-                  saveMedication={(e) => this.saveMedication(e, medication.id)}
-                  onCountChange={(count) => this.onCountChange(medication.id, count)}
-                  deleteMedication={(e) => this.deleteMedication(e, medication.id)}
-                  addPatient={(patient) => this.addPatient(medication.id, patient)}
-                  allPatients={this.state.patients}
-                  client={this.props.client}
-                />
-              ) : (
-                null
-              )
+              return (medication.name.toLowerCase().search(query.toLowerCase()) !== -1) ?
+                (
+                  <Medication
+                    key={medication.id} {...medication}
+                  />
+                ) : (
+                  null
+                )
               // )
             }
             )}
         </div>
-        {showAddForm ? (
-          <div className="row">
-            <div className="col-md-6">
-              <div className="card">
-                <div className="card-body">
-                  <AddMedicationForm addMedication={this.addMedication} />
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : (null)}
       </div>
     )
   }
 }
+
+const MEDICATION_CHANGES_SUBSCRIPTION = gql`
+subscription {
+  medicationUpdated {
+    node {
+      id
+      name
+      count
+    }
+  }
+}
+`
 
 const MEDICATION_QUERY = gql`
   query MedicationQuery {
@@ -163,9 +144,27 @@ const MEDICATION_QUERY = gql`
   }
 `
 
-export default graphql(MEDICATION_QUERY, {
-  name: 'medicationQuery',
-  options: {
-    fetchPolicy: 'network-only',
-  },
-})(MedicationList)
+const ADD_MEDICATION_MUTATION = gql`
+  mutation AddMedicationMutation ($name: String!, $count: Int!) {
+    createMedication(name: $name, count: $count){
+      id
+      name
+      count
+    }
+  }
+`
+
+export default compose(
+  graphql(MEDICATION_QUERY, {
+    name: 'medicationQuery',
+    options: {
+      fetchPolicy: 'network-only',
+    },
+  }),
+  graphql(ADD_MEDICATION_MUTATION, {
+    name: 'addMedication'
+  }),
+  graphql(MEDICATION_CHANGES_SUBSCRIPTION, {
+    name: 'medicationChanges'
+  })
+)(MedicationList)

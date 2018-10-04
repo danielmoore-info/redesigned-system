@@ -14,7 +14,7 @@ import '@fortawesome/fontawesome-free/js/all'
 // import 'tachyons'
 import './index.css'
 
-const httpLink = new HttpLink({ uri: 'http://localhost:4000' })
+const httpLink = new HttpLink({ uri: 'http://172.20.10.122:4000' })
 
 const middlewareLink = new ApolloLink((operation, forward) => {
   // get the authentication token from local storage if it exists
@@ -32,7 +32,7 @@ const middlewareLink = new ApolloLink((operation, forward) => {
 const httpLinkAuth = middlewareLink.concat(httpLink)
 
 const wsLink = new WebSocketLink({
-  uri: `ws://localhost:4000`,
+  uri: `ws://172.20.10.122:4000`,
   options: {
     reconnect: true,
     connectionParams: {
@@ -51,12 +51,9 @@ const link = split(
   httpLinkAuth,
 )
 const cache = new InMemoryCache()
-const stateLink = withClientState({
-  cache
-});
 // apollo client setup
 const client = new ApolloClient({
-  link: ApolloLink.from([link, stateLink]),
+  link: ApolloLink.from([link]),
   cache,
   connectToDevTools: true,
 })

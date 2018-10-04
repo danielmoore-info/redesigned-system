@@ -39,6 +39,20 @@ const medication = {
       info
     )
   },
+
+  async deleteMedication(parent, {id}, ctx, info) {
+    const userId = getUserId(ctx)
+    const medicationExists = await ctx.db.exists.Medication({
+      id,
+      patient: {
+        id: userId
+      }
+    })
+    if (!medicationExists) {
+      throw new Error(`Medication not found.`)
+    }
+    return ctx.db.mutation.deleteMedication({where:{id}})
+  }
 }   
 
 module.exports = {medication}

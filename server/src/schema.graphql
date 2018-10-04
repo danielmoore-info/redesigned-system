@@ -1,4 +1,4 @@
-# import Post, Medication, Schedule from "./generated/prisma.graphql"
+# import Post, Medication, Schedule, MedicationSubscriptionPayload from "./generated/prisma.graphql"
 
 type Query {
   feed: [Post!]!
@@ -20,11 +20,14 @@ type Mutation {
   deletePost(id: ID!): Post!
   createMedication(name: String!, count: Int!): Medication!
   updateMedication(id: ID!, name: String!, count: Int!): Medication!
+  deleteMedication(id: ID!): Medication!
   createSchedule(time: Int!, medications:MedicationIdInput): Schedule!
+
 }
 
 type Subscription {
   feedSubscription: PostSubscriptionPayload!
+  medicationUpdated: MedicationSubscriptionPayload!
 }
 
 type AuthPayload {
