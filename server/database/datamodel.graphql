@@ -14,4 +14,22 @@ type User {
   password: String!
   name: String!
   posts: [Post!]!
+  medications: [Medication!]!
+  schedules: [Schedule!]!
+}
+
+type Medication {
+  patient: User!
+  id: ID! @unique
+  name: String! @unique
+  count: Int!
+  schedules: [Schedule!]!
+}
+
+type Schedule {
+  id: ID! @unique
+  # The hour to take these medications
+  time: Int!
+  patient: User!
+  medications: [Medication!]!
 }

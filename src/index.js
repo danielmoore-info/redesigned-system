@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { HttpLink, InMemoryCache, ApolloClient } from 'apollo-client-preset'
+import { withClientState } from 'apollo-link-state';
 import { WebSocketLink } from 'apollo-link-ws'
 import { ApolloLink, split } from 'apollo-link'
 import { getMainDefinition } from 'apollo-utilities'
@@ -8,7 +9,9 @@ import { AUTH_TOKEN } from './constant'
 import RootContainer from './components/RootContainer'
 import { ApolloProvider } from 'react-apollo'
 
-import 'tachyons'
+import 'bootstrap/dist/css/bootstrap.css'
+import '@fortawesome/fontawesome-free/js/all'
+// import 'tachyons'
 import './index.css'
 
 const httpLink = new HttpLink({ uri: 'http://localhost:4000' })
@@ -47,11 +50,14 @@ const link = split(
   wsLink,
   httpLinkAuth,
 )
-
+const cache = new InMemoryCache()
+const stateLink = withClientState({
+  cache
+});
 // apollo client setup
 const client = new ApolloClient({
-  link: ApolloLink.from([link]),
-  cache: new InMemoryCache(),
+  link: ApolloLink.from([link, stateLink]),
+  cache,
   connectToDevTools: true,
 })
 

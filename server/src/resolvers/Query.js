@@ -26,6 +26,26 @@ const Query = {
     const id = getUserId(ctx)
     return ctx.db.query.user({ where: { id } }, info)
   },
+
+  medications(parent, args, ctx, info) {
+    const id = getUserId(ctx)
+    const where = {
+      patient: {
+        id
+      }
+    }
+    return ctx.db.query.medications({where}, info)
+  },
+
+  schedules(parent, args, ctx, info) {
+    const id = getUserId(ctx)
+    const where = {
+      patient: {
+        id
+      }
+    }
+    return ctx.db.query.schedules({where}, info)
+  }
 }
 
 module.exports = { Query }

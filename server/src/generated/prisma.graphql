@@ -1,7 +1,15 @@
 # source: http://prisma:4466
-# timestamp: Wed Oct 03 2018 10:18:26 GMT+0000 (UTC)
+# timestamp: Thu Oct 04 2018 01:58:10 GMT+0000 (UTC)
+
+type AggregateMedication {
+  count: Int!
+}
 
 type AggregatePost {
+  count: Int!
+}
+
+type AggregateSchedule {
   count: Int!
 }
 
@@ -22,19 +30,326 @@ Long can represent values between -(2^63) and 2^63 - 1.
 """
 scalar Long
 
+type Medication implements Node {
+  patient(where: UserWhereInput): User!
+  id: ID!
+  name: String!
+  count: Int!
+  schedules(where: ScheduleWhereInput, orderBy: ScheduleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Schedule!]
+}
+
+"""A connection to a list of items."""
+type MedicationConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [MedicationEdge]!
+  aggregate: AggregateMedication!
+}
+
+input MedicationCreateInput {
+  name: String!
+  count: Int!
+  patient: UserCreateOneWithoutMedicationsInput!
+  schedules: ScheduleCreateManyWithoutMedicationsInput
+}
+
+input MedicationCreateManyWithoutPatientInput {
+  create: [MedicationCreateWithoutPatientInput!]
+  connect: [MedicationWhereUniqueInput!]
+}
+
+input MedicationCreateManyWithoutSchedulesInput {
+  create: [MedicationCreateWithoutSchedulesInput!]
+  connect: [MedicationWhereUniqueInput!]
+}
+
+input MedicationCreateWithoutPatientInput {
+  name: String!
+  count: Int!
+  schedules: ScheduleCreateManyWithoutMedicationsInput
+}
+
+input MedicationCreateWithoutSchedulesInput {
+  name: String!
+  count: Int!
+  patient: UserCreateOneWithoutMedicationsInput!
+}
+
+"""An edge in a connection."""
+type MedicationEdge {
+  """The item at the end of the edge."""
+  node: Medication!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum MedicationOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  count_ASC
+  count_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type MedicationPreviousValues {
+  id: ID!
+  name: String!
+  count: Int!
+}
+
+type MedicationSubscriptionPayload {
+  mutation: MutationType!
+  node: Medication
+  updatedFields: [String!]
+  previousValues: MedicationPreviousValues
+}
+
+input MedicationSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [MedicationSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [MedicationSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [MedicationSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: MedicationWhereInput
+}
+
+input MedicationUpdateInput {
+  name: String
+  count: Int
+  patient: UserUpdateOneWithoutMedicationsInput
+  schedules: ScheduleUpdateManyWithoutMedicationsInput
+}
+
+input MedicationUpdateManyWithoutPatientInput {
+  create: [MedicationCreateWithoutPatientInput!]
+  connect: [MedicationWhereUniqueInput!]
+  disconnect: [MedicationWhereUniqueInput!]
+  delete: [MedicationWhereUniqueInput!]
+  update: [MedicationUpdateWithWhereUniqueWithoutPatientInput!]
+  upsert: [MedicationUpsertWithWhereUniqueWithoutPatientInput!]
+}
+
+input MedicationUpdateManyWithoutSchedulesInput {
+  create: [MedicationCreateWithoutSchedulesInput!]
+  connect: [MedicationWhereUniqueInput!]
+  disconnect: [MedicationWhereUniqueInput!]
+  delete: [MedicationWhereUniqueInput!]
+  update: [MedicationUpdateWithWhereUniqueWithoutSchedulesInput!]
+  upsert: [MedicationUpsertWithWhereUniqueWithoutSchedulesInput!]
+}
+
+input MedicationUpdateWithoutPatientDataInput {
+  name: String
+  count: Int
+  schedules: ScheduleUpdateManyWithoutMedicationsInput
+}
+
+input MedicationUpdateWithoutSchedulesDataInput {
+  name: String
+  count: Int
+  patient: UserUpdateOneWithoutMedicationsInput
+}
+
+input MedicationUpdateWithWhereUniqueWithoutPatientInput {
+  where: MedicationWhereUniqueInput!
+  data: MedicationUpdateWithoutPatientDataInput!
+}
+
+input MedicationUpdateWithWhereUniqueWithoutSchedulesInput {
+  where: MedicationWhereUniqueInput!
+  data: MedicationUpdateWithoutSchedulesDataInput!
+}
+
+input MedicationUpsertWithWhereUniqueWithoutPatientInput {
+  where: MedicationWhereUniqueInput!
+  update: MedicationUpdateWithoutPatientDataInput!
+  create: MedicationCreateWithoutPatientInput!
+}
+
+input MedicationUpsertWithWhereUniqueWithoutSchedulesInput {
+  where: MedicationWhereUniqueInput!
+  update: MedicationUpdateWithoutSchedulesDataInput!
+  create: MedicationCreateWithoutSchedulesInput!
+}
+
+input MedicationWhereInput {
+  """Logical AND on all given filters."""
+  AND: [MedicationWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [MedicationWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [MedicationWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  count: Int
+
+  """All values that are not equal to given value."""
+  count_not: Int
+
+  """All values that are contained in given list."""
+  count_in: [Int!]
+
+  """All values that are not contained in given list."""
+  count_not_in: [Int!]
+
+  """All values less than the given value."""
+  count_lt: Int
+
+  """All values less than or equal the given value."""
+  count_lte: Int
+
+  """All values greater than the given value."""
+  count_gt: Int
+
+  """All values greater than or equal the given value."""
+  count_gte: Int
+  patient: UserWhereInput
+  schedules_every: ScheduleWhereInput
+  schedules_some: ScheduleWhereInput
+  schedules_none: ScheduleWhereInput
+}
+
+input MedicationWhereUniqueInput {
+  id: ID
+  name: String
+}
+
 type Mutation {
   createPost(data: PostCreateInput!): Post!
   createUser(data: UserCreateInput!): User!
+  createMedication(data: MedicationCreateInput!): Medication!
+  createSchedule(data: ScheduleCreateInput!): Schedule!
   updatePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  updateMedication(data: MedicationUpdateInput!, where: MedicationWhereUniqueInput!): Medication
+  updateSchedule(data: ScheduleUpdateInput!, where: ScheduleWhereUniqueInput!): Schedule
   deletePost(where: PostWhereUniqueInput!): Post
   deleteUser(where: UserWhereUniqueInput!): User
+  deleteMedication(where: MedicationWhereUniqueInput!): Medication
+  deleteSchedule(where: ScheduleWhereUniqueInput!): Schedule
   upsertPost(where: PostWhereUniqueInput!, create: PostCreateInput!, update: PostUpdateInput!): Post!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  upsertMedication(where: MedicationWhereUniqueInput!, create: MedicationCreateInput!, update: MedicationUpdateInput!): Medication!
+  upsertSchedule(where: ScheduleWhereUniqueInput!, create: ScheduleCreateInput!, update: ScheduleUpdateInput!): Schedule!
   updateManyPosts(data: PostUpdateInput!, where: PostWhereInput): BatchPayload!
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
+  updateManyMedications(data: MedicationUpdateInput!, where: MedicationWhereInput): BatchPayload!
+  updateManySchedules(data: ScheduleUpdateInput!, where: ScheduleWhereInput): BatchPayload!
   deleteManyPosts(where: PostWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
+  deleteManyMedications(where: MedicationWhereInput): BatchPayload!
+  deleteManySchedules(where: ScheduleWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -394,10 +709,16 @@ input PostWhereUniqueInput {
 type Query {
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  medications(where: MedicationWhereInput, orderBy: MedicationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Medication]!
+  schedules(where: ScheduleWhereInput, orderBy: ScheduleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Schedule]!
   post(where: PostWhereUniqueInput!): Post
   user(where: UserWhereUniqueInput!): User
+  medication(where: MedicationWhereUniqueInput!): Medication
+  schedule(where: ScheduleWhereUniqueInput!): Schedule
   postsConnection(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  medicationsConnection(where: MedicationWhereInput, orderBy: MedicationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MedicationConnection!
+  schedulesConnection(where: ScheduleWhereInput, orderBy: ScheduleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ScheduleConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -406,9 +727,255 @@ type Query {
   ): Node
 }
 
+type Schedule implements Node {
+  id: ID!
+  time: Int!
+  patient(where: UserWhereInput): User!
+  medications(where: MedicationWhereInput, orderBy: MedicationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Medication!]
+}
+
+"""A connection to a list of items."""
+type ScheduleConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [ScheduleEdge]!
+  aggregate: AggregateSchedule!
+}
+
+input ScheduleCreateInput {
+  time: Int!
+  patient: UserCreateOneWithoutSchedulesInput!
+  medications: MedicationCreateManyWithoutSchedulesInput
+}
+
+input ScheduleCreateManyWithoutMedicationsInput {
+  create: [ScheduleCreateWithoutMedicationsInput!]
+  connect: [ScheduleWhereUniqueInput!]
+}
+
+input ScheduleCreateManyWithoutPatientInput {
+  create: [ScheduleCreateWithoutPatientInput!]
+  connect: [ScheduleWhereUniqueInput!]
+}
+
+input ScheduleCreateWithoutMedicationsInput {
+  time: Int!
+  patient: UserCreateOneWithoutSchedulesInput!
+}
+
+input ScheduleCreateWithoutPatientInput {
+  time: Int!
+  medications: MedicationCreateManyWithoutSchedulesInput
+}
+
+"""An edge in a connection."""
+type ScheduleEdge {
+  """The item at the end of the edge."""
+  node: Schedule!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum ScheduleOrderByInput {
+  id_ASC
+  id_DESC
+  time_ASC
+  time_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type SchedulePreviousValues {
+  id: ID!
+  time: Int!
+}
+
+type ScheduleSubscriptionPayload {
+  mutation: MutationType!
+  node: Schedule
+  updatedFields: [String!]
+  previousValues: SchedulePreviousValues
+}
+
+input ScheduleSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ScheduleSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ScheduleSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ScheduleSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: ScheduleWhereInput
+}
+
+input ScheduleUpdateInput {
+  time: Int
+  patient: UserUpdateOneWithoutSchedulesInput
+  medications: MedicationUpdateManyWithoutSchedulesInput
+}
+
+input ScheduleUpdateManyWithoutMedicationsInput {
+  create: [ScheduleCreateWithoutMedicationsInput!]
+  connect: [ScheduleWhereUniqueInput!]
+  disconnect: [ScheduleWhereUniqueInput!]
+  delete: [ScheduleWhereUniqueInput!]
+  update: [ScheduleUpdateWithWhereUniqueWithoutMedicationsInput!]
+  upsert: [ScheduleUpsertWithWhereUniqueWithoutMedicationsInput!]
+}
+
+input ScheduleUpdateManyWithoutPatientInput {
+  create: [ScheduleCreateWithoutPatientInput!]
+  connect: [ScheduleWhereUniqueInput!]
+  disconnect: [ScheduleWhereUniqueInput!]
+  delete: [ScheduleWhereUniqueInput!]
+  update: [ScheduleUpdateWithWhereUniqueWithoutPatientInput!]
+  upsert: [ScheduleUpsertWithWhereUniqueWithoutPatientInput!]
+}
+
+input ScheduleUpdateWithoutMedicationsDataInput {
+  time: Int
+  patient: UserUpdateOneWithoutSchedulesInput
+}
+
+input ScheduleUpdateWithoutPatientDataInput {
+  time: Int
+  medications: MedicationUpdateManyWithoutSchedulesInput
+}
+
+input ScheduleUpdateWithWhereUniqueWithoutMedicationsInput {
+  where: ScheduleWhereUniqueInput!
+  data: ScheduleUpdateWithoutMedicationsDataInput!
+}
+
+input ScheduleUpdateWithWhereUniqueWithoutPatientInput {
+  where: ScheduleWhereUniqueInput!
+  data: ScheduleUpdateWithoutPatientDataInput!
+}
+
+input ScheduleUpsertWithWhereUniqueWithoutMedicationsInput {
+  where: ScheduleWhereUniqueInput!
+  update: ScheduleUpdateWithoutMedicationsDataInput!
+  create: ScheduleCreateWithoutMedicationsInput!
+}
+
+input ScheduleUpsertWithWhereUniqueWithoutPatientInput {
+  where: ScheduleWhereUniqueInput!
+  update: ScheduleUpdateWithoutPatientDataInput!
+  create: ScheduleCreateWithoutPatientInput!
+}
+
+input ScheduleWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ScheduleWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ScheduleWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ScheduleWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  time: Int
+
+  """All values that are not equal to given value."""
+  time_not: Int
+
+  """All values that are contained in given list."""
+  time_in: [Int!]
+
+  """All values that are not contained in given list."""
+  time_not_in: [Int!]
+
+  """All values less than the given value."""
+  time_lt: Int
+
+  """All values less than or equal the given value."""
+  time_lte: Int
+
+  """All values greater than the given value."""
+  time_gt: Int
+
+  """All values greater than or equal the given value."""
+  time_gte: Int
+  patient: UserWhereInput
+  medications_every: MedicationWhereInput
+  medications_some: MedicationWhereInput
+  medications_none: MedicationWhereInput
+}
+
+input ScheduleWhereUniqueInput {
+  id: ID
+}
+
 type Subscription {
   post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  medication(where: MedicationSubscriptionWhereInput): MedicationSubscriptionPayload
+  schedule(where: ScheduleSubscriptionWhereInput): ScheduleSubscriptionPayload
 }
 
 type User implements Node {
@@ -417,6 +984,8 @@ type User implements Node {
   password: String!
   name: String!
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
+  medications(where: MedicationWhereInput, orderBy: MedicationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Medication!]
+  schedules(where: ScheduleWhereInput, orderBy: ScheduleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Schedule!]
 }
 
 """A connection to a list of items."""
@@ -434,6 +1003,13 @@ input UserCreateInput {
   password: String!
   name: String!
   posts: PostCreateManyWithoutAuthorInput
+  medications: MedicationCreateManyWithoutPatientInput
+  schedules: ScheduleCreateManyWithoutPatientInput
+}
+
+input UserCreateOneWithoutMedicationsInput {
+  create: UserCreateWithoutMedicationsInput
+  connect: UserWhereUniqueInput
 }
 
 input UserCreateOneWithoutPostsInput {
@@ -441,10 +1017,33 @@ input UserCreateOneWithoutPostsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutSchedulesInput {
+  create: UserCreateWithoutSchedulesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateWithoutMedicationsInput {
+  email: String!
+  password: String!
+  name: String!
+  posts: PostCreateManyWithoutAuthorInput
+  schedules: ScheduleCreateManyWithoutPatientInput
+}
+
 input UserCreateWithoutPostsInput {
   email: String!
   password: String!
   name: String!
+  medications: MedicationCreateManyWithoutPatientInput
+  schedules: ScheduleCreateManyWithoutPatientInput
+}
+
+input UserCreateWithoutSchedulesInput {
+  email: String!
+  password: String!
+  name: String!
+  posts: PostCreateManyWithoutAuthorInput
+  medications: MedicationCreateManyWithoutPatientInput
 }
 
 """An edge in a connection."""
@@ -522,6 +1121,16 @@ input UserUpdateInput {
   password: String
   name: String
   posts: PostUpdateManyWithoutAuthorInput
+  medications: MedicationUpdateManyWithoutPatientInput
+  schedules: ScheduleUpdateManyWithoutPatientInput
+}
+
+input UserUpdateOneWithoutMedicationsInput {
+  create: UserCreateWithoutMedicationsInput
+  connect: UserWhereUniqueInput
+  delete: Boolean
+  update: UserUpdateWithoutMedicationsDataInput
+  upsert: UserUpsertWithoutMedicationsInput
 }
 
 input UserUpdateOneWithoutPostsInput {
@@ -532,15 +1141,51 @@ input UserUpdateOneWithoutPostsInput {
   upsert: UserUpsertWithoutPostsInput
 }
 
+input UserUpdateOneWithoutSchedulesInput {
+  create: UserCreateWithoutSchedulesInput
+  connect: UserWhereUniqueInput
+  delete: Boolean
+  update: UserUpdateWithoutSchedulesDataInput
+  upsert: UserUpsertWithoutSchedulesInput
+}
+
+input UserUpdateWithoutMedicationsDataInput {
+  email: String
+  password: String
+  name: String
+  posts: PostUpdateManyWithoutAuthorInput
+  schedules: ScheduleUpdateManyWithoutPatientInput
+}
+
 input UserUpdateWithoutPostsDataInput {
   email: String
   password: String
   name: String
+  medications: MedicationUpdateManyWithoutPatientInput
+  schedules: ScheduleUpdateManyWithoutPatientInput
+}
+
+input UserUpdateWithoutSchedulesDataInput {
+  email: String
+  password: String
+  name: String
+  posts: PostUpdateManyWithoutAuthorInput
+  medications: MedicationUpdateManyWithoutPatientInput
+}
+
+input UserUpsertWithoutMedicationsInput {
+  update: UserUpdateWithoutMedicationsDataInput!
+  create: UserCreateWithoutMedicationsInput!
 }
 
 input UserUpsertWithoutPostsInput {
   update: UserUpdateWithoutPostsDataInput!
   create: UserCreateWithoutPostsInput!
+}
+
+input UserUpsertWithoutSchedulesInput {
+  update: UserUpdateWithoutSchedulesDataInput!
+  create: UserCreateWithoutSchedulesInput!
 }
 
 input UserWhereInput {
@@ -715,6 +1360,12 @@ input UserWhereInput {
   posts_every: PostWhereInput
   posts_some: PostWhereInput
   posts_none: PostWhereInput
+  medications_every: MedicationWhereInput
+  medications_some: MedicationWhereInput
+  medications_none: MedicationWhereInput
+  schedules_every: ScheduleWhereInput
+  schedules_some: ScheduleWhereInput
+  schedules_none: ScheduleWhereInput
 }
 
 input UserWhereUniqueInput {

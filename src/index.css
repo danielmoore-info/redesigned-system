@@ -1,4 +1,4 @@
-@import 'https://fonts.googleapis.com/css?family=Open+Sans:300, 400';
+/* @import 'https://fonts.googleapis.com/css?family=Open+Sans:300, 400';
 
 body {
   margin: 0;
@@ -63,4 +63,115 @@ html {
 .close img {
   width: 20px;
   height: 20px;
+} */
+
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  /* margin-top: 15px; */
+  margin-bottom: 15px;
+  /* background-color: #CFD4D7 */
+}
+:focus{outline: none;}
+
+.margin-bottom {
+  margin-bottom: 10px;
+}
+
+.white {
+  background-color: white;
+}
+
+.function-card {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+
+
+/* button {
+  margin-right: 10px;
+} */
+
+
+.nothing {
+  /* background-color: #FFFFFF;
+  background-color: #9EB47F;
+  background-color: #A1817A;
+  background-color: #63696F;
+  background-color: #54403E; */
+background-color: #FFFFFF;
+background-color: #9EB47F;
+background-color: #7F7F83;
+background-color: #4F2F37;
+background-color: #2E2032;
+} 
+
+
+
+.list-card {
+  -webkit-box-shadow: -4px 5px 28px -1px rgba(0,0,0,0.41);
+  -moz-box-shadow: -4px 5px 28px -1px rgba(0,0,0,0.41);
+  box-shadow: -4px 5px 28px -1px rgba(0,0,0,0.41);
+  border-radius: 15px;
+}
+
+
+.list-card-button {
+  border-radius: 15px;
+  line-height: 1.5;
+  font-size: 1rem;
+  font-weight: 400;
+  border: 1px solid transparent;
+  padding: 0.375rem 0.75rem;
+  user-select: none;
+  outline: none;
+  color: white;
+  background-color: #7F7F83; 
+}
+
+.off-green {
+  background-color: #9EB47F;
+  color: white;
+}
+
+.marone {
+  background-color: #4F2F37;
+  color: white;
+}
+
+.grey-blue {
+  background-color:#7F7F83;
+}
+
+.deep-purple {
+  background-color: #2E2032;
+}
+
+.form-input-field {
+  display: block;
+  width: 100%;
+  height: calc(2.25rem + 2px);
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 10rem;
+  -webkit-transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+  transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+  -o-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+}
+#patientForm input {
+  border: none;
+}
+
+#button-bar button {
+  margin-right: 10px;
 }

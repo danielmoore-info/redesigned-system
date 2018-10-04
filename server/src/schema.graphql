@@ -1,10 +1,15 @@
-# import Post from "./generated/prisma.graphql"
+# import Post, Medication, Schedule from "./generated/prisma.graphql"
 
 type Query {
   feed: [Post!]!
   drafts: [Post!]!
   post(id: ID!): Post
   me: User
+  medications: [Medication!]!
+  schedules: [Schedule!]!
+}
+input MedicationIdInput {
+  id: [ID!]!
 }
 
 type Mutation {
@@ -13,6 +18,8 @@ type Mutation {
   createDraft(title: String!, text: String!): Post!
   publish(id: ID!): Post!
   deletePost(id: ID!): Post!
+  createMedication(name: String!, count: Int!): Medication!
+  createSchedule(time: Int!, medications:MedicationIdInput): Schedule!
 }
 
 type Subscription {
