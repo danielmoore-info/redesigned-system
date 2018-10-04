@@ -19,6 +19,7 @@ type Mutation {
   publish(id: ID!): Post!
   deletePost(id: ID!): Post!
   createMedication(name: String!, count: Int!): Medication!
+  updateMedication(id: ID!, name: String!, count: Int!): Medication!
   createSchedule(time: Int!, medications:MedicationIdInput): Schedule!
 }
 
