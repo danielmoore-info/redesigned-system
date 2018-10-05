@@ -19,7 +19,7 @@ const medication = {
     )
   },
 
-  async updateMedication(parent, {id, name, count}, ctx, info) {
+  async updateMedication(parent, {id, name, count, dose}, ctx, info) {
     const userId = getUserId(ctx)
     const medicationExists = await ctx.db.exists.Medication({
       id,
@@ -36,12 +36,37 @@ const medication = {
         data: {
           name: name,
           count: count,
+          dose: dose,
         }
       },
       info
     )
   },
 
+  async updatePatientMedication(parent, {id, name, count, dose, patientId}, ctx, info){
+    const userId = getUserId(ctx)
+    const medicationExists = await ctx.db.exists.Medication({
+      id,
+      patient: {
+        id: patientId
+      },
+    })
+    if (!medicationExists) {
+      throw new Error(`Medication not found`)
+    }
+    return ctx.db.mutation.updateMedication(
+      {
+        where:{id},
+        data: {
+          name: name,
+          count: count,
+          dose: dose,
+        }
+      },
+      info
+    )
+
+  },
   async deleteMedication(parent, {id}, ctx, info) {
     const userId = getUserId(ctx)
     const medicationExists = await ctx.db.exists.Medication({

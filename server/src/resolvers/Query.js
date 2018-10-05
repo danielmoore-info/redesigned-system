@@ -50,6 +50,17 @@ const Query = {
     return ctx.db.query.schedules({
       where
     }, info)
+  },
+
+  userSchedules(parent, {id}, ctx, info){
+    const where = {
+      patient: {
+        id
+      },
+    }
+    return ctx.db.query.schedules({
+      where
+    }, info)
   }
 }
 
