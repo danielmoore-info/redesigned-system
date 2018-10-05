@@ -18,10 +18,10 @@ type Mutation {
   createDraft(title: String!, text: String!): Post!
   publish(id: ID!): Post!
   deletePost(id: ID!): Post!
-  createMedication(name: String!, count: Int!): Medication!
+  createMedication(name: String!, count: Int!, dispenser: Int, dose: Int!): Medication!
   updateMedication(id: ID!, name: String!, count: Int!): Medication!
   deleteMedication(id: ID!): Medication!
-  createSchedule(time: Int!, medications:MedicationIdInput): Schedule!
+  createSchedule(time: Int!, medications:MedicationIdInput, takenTime: DateTime): Schedule!
 
 }
 

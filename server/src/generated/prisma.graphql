@@ -1,5 +1,5 @@
 # source: http://prisma:4466
-# timestamp: Thu Oct 04 2018 04:18:57 GMT+0000 (UTC)
+# timestamp: Fri Oct 05 2018 03:00:35 GMT+0000 (UTC)
 
 type AggregateMedication {
   count: Int!
@@ -36,6 +36,8 @@ type Medication implements Node {
   name: String!
   count: Int!
   schedules(where: ScheduleWhereInput, orderBy: ScheduleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Schedule!]
+  dispenser: Int
+  dose: Int!
 }
 
 """A connection to a list of items."""
@@ -51,6 +53,8 @@ type MedicationConnection {
 input MedicationCreateInput {
   name: String!
   count: Int!
+  dispenser: Int
+  dose: Int!
   patient: UserCreateOneWithoutMedicationsInput!
   schedules: ScheduleCreateManyWithoutMedicationsInput
 }
@@ -68,12 +72,16 @@ input MedicationCreateManyWithoutSchedulesInput {
 input MedicationCreateWithoutPatientInput {
   name: String!
   count: Int!
+  dispenser: Int
+  dose: Int!
   schedules: ScheduleCreateManyWithoutMedicationsInput
 }
 
 input MedicationCreateWithoutSchedulesInput {
   name: String!
   count: Int!
+  dispenser: Int
+  dose: Int!
   patient: UserCreateOneWithoutMedicationsInput!
 }
 
@@ -93,6 +101,10 @@ enum MedicationOrderByInput {
   name_DESC
   count_ASC
   count_DESC
+  dispenser_ASC
+  dispenser_DESC
+  dose_ASC
+  dose_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -103,6 +115,8 @@ type MedicationPreviousValues {
   id: ID!
   name: String!
   count: Int!
+  dispenser: Int
+  dose: Int!
 }
 
 type MedicationSubscriptionPayload {
@@ -147,6 +161,8 @@ input MedicationSubscriptionWhereInput {
 input MedicationUpdateInput {
   name: String
   count: Int
+  dispenser: Int
+  dose: Int
   patient: UserUpdateOneWithoutMedicationsInput
   schedules: ScheduleUpdateManyWithoutMedicationsInput
 }
@@ -172,12 +188,16 @@ input MedicationUpdateManyWithoutSchedulesInput {
 input MedicationUpdateWithoutPatientDataInput {
   name: String
   count: Int
+  dispenser: Int
+  dose: Int
   schedules: ScheduleUpdateManyWithoutMedicationsInput
 }
 
 input MedicationUpdateWithoutSchedulesDataInput {
   name: String
   count: Int
+  dispenser: Int
+  dose: Int
   patient: UserUpdateOneWithoutMedicationsInput
 }
 
@@ -314,6 +334,50 @@ input MedicationWhereInput {
 
   """All values greater than or equal the given value."""
   count_gte: Int
+  dispenser: Int
+
+  """All values that are not equal to given value."""
+  dispenser_not: Int
+
+  """All values that are contained in given list."""
+  dispenser_in: [Int!]
+
+  """All values that are not contained in given list."""
+  dispenser_not_in: [Int!]
+
+  """All values less than the given value."""
+  dispenser_lt: Int
+
+  """All values less than or equal the given value."""
+  dispenser_lte: Int
+
+  """All values greater than the given value."""
+  dispenser_gt: Int
+
+  """All values greater than or equal the given value."""
+  dispenser_gte: Int
+  dose: Int
+
+  """All values that are not equal to given value."""
+  dose_not: Int
+
+  """All values that are contained in given list."""
+  dose_in: [Int!]
+
+  """All values that are not contained in given list."""
+  dose_not_in: [Int!]
+
+  """All values less than the given value."""
+  dose_lt: Int
+
+  """All values less than or equal the given value."""
+  dose_lte: Int
+
+  """All values greater than the given value."""
+  dose_gt: Int
+
+  """All values greater than or equal the given value."""
+  dose_gte: Int
   patient: UserWhereInput
   schedules_every: ScheduleWhereInput
   schedules_some: ScheduleWhereInput
@@ -322,6 +386,7 @@ input MedicationWhereInput {
 
 input MedicationWhereUniqueInput {
   id: ID
+  dispenser: Int
 }
 
 type Mutation {
@@ -731,6 +796,7 @@ type Schedule implements Node {
   time: Int!
   patient(where: UserWhereInput): User!
   medications(where: MedicationWhereInput, orderBy: MedicationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Medication!]
+  takenTime: DateTime
 }
 
 """A connection to a list of items."""
@@ -745,6 +811,7 @@ type ScheduleConnection {
 
 input ScheduleCreateInput {
   time: Int!
+  takenTime: DateTime
   patient: UserCreateOneWithoutSchedulesInput!
   medications: MedicationCreateManyWithoutSchedulesInput
 }
@@ -761,11 +828,13 @@ input ScheduleCreateManyWithoutPatientInput {
 
 input ScheduleCreateWithoutMedicationsInput {
   time: Int!
+  takenTime: DateTime
   patient: UserCreateOneWithoutSchedulesInput!
 }
 
 input ScheduleCreateWithoutPatientInput {
   time: Int!
+  takenTime: DateTime
   medications: MedicationCreateManyWithoutSchedulesInput
 }
 
@@ -783,6 +852,8 @@ enum ScheduleOrderByInput {
   id_DESC
   time_ASC
   time_DESC
+  takenTime_ASC
+  takenTime_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -792,6 +863,7 @@ enum ScheduleOrderByInput {
 type SchedulePreviousValues {
   id: ID!
   time: Int!
+  takenTime: DateTime
 }
 
 type ScheduleSubscriptionPayload {
@@ -835,6 +907,7 @@ input ScheduleSubscriptionWhereInput {
 
 input ScheduleUpdateInput {
   time: Int
+  takenTime: DateTime
   patient: UserUpdateOneWithoutSchedulesInput
   medications: MedicationUpdateManyWithoutSchedulesInput
 }
@@ -859,11 +932,13 @@ input ScheduleUpdateManyWithoutPatientInput {
 
 input ScheduleUpdateWithoutMedicationsDataInput {
   time: Int
+  takenTime: DateTime
   patient: UserUpdateOneWithoutSchedulesInput
 }
 
 input ScheduleUpdateWithoutPatientDataInput {
   time: Int
+  takenTime: DateTime
   medications: MedicationUpdateManyWithoutSchedulesInput
 }
 
@@ -960,6 +1035,28 @@ input ScheduleWhereInput {
 
   """All values greater than or equal the given value."""
   time_gte: Int
+  takenTime: DateTime
+
+  """All values that are not equal to given value."""
+  takenTime_not: DateTime
+
+  """All values that are contained in given list."""
+  takenTime_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  takenTime_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  takenTime_lt: DateTime
+
+  """All values less than or equal the given value."""
+  takenTime_lte: DateTime
+
+  """All values greater than the given value."""
+  takenTime_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  takenTime_gte: DateTime
   patient: UserWhereInput
   medications_every: MedicationWhereInput
   medications_some: MedicationWhereInput

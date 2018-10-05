@@ -1,13 +1,15 @@
 const { getUserId } = require('../../utils')
 
 const medication = {
-  async createMedication(parent, {name, count}, ctx, info) {
+  async createMedication(parent, {name, count, dispenser, dose}, ctx, info) {
     const userId = getUserId(ctx)
     return ctx.db.mutation.createMedication(
       {
         data: {
           name,
           count,
+          dispenser,
+          dose,
           patient: {
             connect: { id: userId },
           },

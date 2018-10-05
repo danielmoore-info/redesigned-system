@@ -24,6 +24,8 @@ type Medication {
   name: String!
   count: Int!
   schedules: [Schedule!]!
+  dispenser: Int @unique
+  dose: Int!
 }
 
 type Schedule {
@@ -32,4 +34,5 @@ type Schedule {
   time: Int!
   patient: User!
   medications: [Medication!]!
+  takenTime: DateTime
 }
