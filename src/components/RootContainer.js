@@ -16,6 +16,7 @@ import SignupPage from './SignupPage'
 import PageNotFound from './PageNotFound'
 import LogoutPage from './LogoutPage'
 import MedicationList from './MedicationList'
+import ScheduleList from './ScheduleList';
 import { AUTH_TOKEN } from '../constant'
 import { isTokenExpired } from '../helper/jwtHelper'
 import { graphql } from 'react-apollo'
@@ -115,6 +116,16 @@ class RootContainer extends Component {
                 Medications
               </NavLink>
             </li>
+            <li className="nav-item">
+              <NavLink
+                to="/schedules"
+                className="nav-link"
+                activeClassName="active"
+                exact={true}
+              >
+                Schedules
+              </NavLink>
+            </li>
           </ul>
         </div>
       </nav> 
@@ -135,7 +146,11 @@ class RootContainer extends Component {
             token={this.state.token}
             path="/medications"
             component={MedicationList}
-            client={this.props.client}
+          />
+          <ProtectedRoute
+            token={this.state.token}
+            path="/schedules"
+            component={ScheduleList}
           />
           <ProtectedRoute
             token={this.state.token}

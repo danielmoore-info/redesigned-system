@@ -189,3 +189,23 @@ background-color: #2E2032;
 .card-body div .smaller {
   font-size: 1rem;
 }
+
+.medicationList {
+  background-color: #42505f13;
+  border-radius: 10px;
+  padding: 0.7rem 0.7rem;
+}
+
+.card-body {
+  padding: 0.7rem;
+}
+
+.nested-list-item {
+  background-color: white;
+  border-radius: 5px;
+  margin-bottom: 7px;
+  -webkit-box-shadow: 0px 0px 7px 1px rgba(0,0,0,0.29);
+  -moz-box-shadow: 0px 0px 7px 1px rgba(0,0,0,0.29);
+  box-shadow: 0px 0px 7px 1px rgba(0,0,0,0.29);
+  padding: 0.2rem;
+}
