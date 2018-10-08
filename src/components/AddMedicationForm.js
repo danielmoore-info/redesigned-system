@@ -1,10 +1,10 @@
 import  React, {Component} from 'react'
 
 const AddMedicationForm = ({addMedication=f=>f}) => {
-  let _name, _count
+  let _name, _count, _dose
   const submit = e => {
     e.preventDefault()
-    addMedication(_name.value, _count.value)
+    addMedication(_name.value, _count.value, _dose.value)
     _name.value=''
     _count.value=''
   }
@@ -34,6 +34,16 @@ const AddMedicationForm = ({addMedication=f=>f}) => {
               autocapitalize="off" 
               spellcheck="false"
               placeholder="Number of tablets"
+            />
+            <input
+              ref={input => _dose = input}
+              type="number"
+              className="form-input-field smaller"
+              autocomplete="off" 
+              autocorrect="off" 
+              autocapitalize="off" 
+              spellcheck="false"
+              placeholder="Dose of medication"
             />
               <div id="button-bar" className="">
                 <button className="btn list-card-button off-green" onClick={this.deleteMedication}>

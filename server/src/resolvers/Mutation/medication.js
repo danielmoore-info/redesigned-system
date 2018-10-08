@@ -19,7 +19,7 @@ const medication = {
     )
   },
 
-  async updateMedication(parent, {id, name, count, dose}, ctx, info) {
+  async updateMedication(parent, {id, name, count, dispenser, dose}, ctx, info) {
     const userId = getUserId(ctx)
     const medicationExists = await ctx.db.exists.Medication({
       id,
@@ -37,13 +37,14 @@ const medication = {
           name: name,
           count: count,
           dose: dose,
+          dispenser: dispenser,
         }
       },
       info
     )
   },
 
-  async updatePatientMedication(parent, {id, name, count, dose, patientId}, ctx, info){
+  async updatePatientMedication(parent, {id, name, count, dispenser, dose, patientId}, ctx, info){
     const userId = getUserId(ctx)
     const medicationExists = await ctx.db.exists.Medication({
       id,
@@ -61,6 +62,7 @@ const medication = {
           name: name,
           count: count,
           dose: dose,
+          dispenser: dispenser,
         }
       },
       info

@@ -170,13 +170,16 @@ background-color: #2E2032;
 }
 #patientForm input {
   border: none;
-}
 
+}
+#button-bar {
+  margin-top: 10px;
+}
 #button-bar button {
   margin-right: 10px;
 }
 
-.card-body div input {
+.text-look {
   color: #212529;
   border-radius: 0%;
   border: none;

@@ -6,27 +6,35 @@ class Medication extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      showForm: false,
-      showUsers: false,
-      loading: false
+      showSave: false,
+      // showUsers: false,
+      // loading: false,
+      name: this.props.name,
+      count: this.props.count,
+      dose: this.props.dose
     }
     this.deleteMedication = this.deleteMedication.bind(this)
+    this.saveMedication = this.saveMedication.bind(this)
+    this.initialState = this.state
   }
 
-  updateName(e) {
+  saveMedication(e) {
+    const {name, count, dose} = this.state
     e.preventDefault()
-    const name = e.target.value
     // this.setState({
     //   loading:true
     // })
     this.props.updateMedication({
       variables: {
-        name
+        name,
+        count,
+        dose,
       },
     }).then(
       result => {
         this.setState({
-          loading: false
+          loading: false,
+          showSave:false
         })
       }
     ).catch(err => {
@@ -36,27 +44,37 @@ class Medication extends Component {
       })
     })
   }
+
+  updateName(e) {
+    this.setState({
+      showSave: true
+    })
+    e.preventDefault()
+    const name = e.target.value
+    this.setState({
+      name: name
+    })
+  }
+
   updateCount(e) {
+    this.setState({
+      showSave: true
+    })
     e.preventDefault()
     const count = e.target.value
-    // this.setState({
-    //   loading:true
-    // })
-    this.props.updateMedication({
-      variables: {
-        count
-      }
-    }).then(
-      result => {
-        this.setState({
-          loading: false
-        })
-      }
-    ).catch(err => {
-      this.setState({
-        loading: false,
-        error: true
-      })
+    this.setState({
+      count: count
+    })
+  }
+
+  updateDose(e){
+    this.setState({
+      showSave: true
+    })
+    e.preventDefault()
+    const dose = e.target.value
+    this.setState({
+      dose: dose
     })
   }
 
@@ -106,34 +124,68 @@ class Medication extends Component {
               ) :
               (
                 <div>
-                  <input
-                    type="text"
-                    className="form-input-field"
-                    value={this.props.name}
-                    onChange={(e) => this.updateName(e)}
-                    autoComplete="off"
-                    autoCorrect="off"
-                    autoCapitalize="off"
-                    spellCheck="false"
-                    placeholder="Medication name..."
-                  />
-                  <input
-                    type="number"
-                    className="form-input-field smaller"
-                    value={this.props.count}
-                    onChange={(e) => this.updateCount(e)}
-                    autoComplete="off"
-                    autoCorrect="off"
-                    autoCapitalize="off"
-                    spellCheck="false"
-                    placeholder="Number of tablets"
-                  />
+                  <div className="form-group">
+                    <input
+                      id="nameInput"
+                      type="text"
+                      className="form-input-field text-look"
+                      value={this.state.name}
+                      onChange={(e) => this.updateName(e)}
+                      autoComplete="off"
+                      autoCorrect="off"
+                      autoCapitalize="off"
+                      spellCheck="false"
+                      placeholder="Medication name..."
+                    />
+                  </div>
+                  <div className="form-group row">
+                    <label className="col-sm-6 col-form-label" htmlFor="countInput">Left:</label>
+                    <div className="col-sm-6">
+                      <input
+                        id="countInput"
+                        type="number"
+                        className="form-input-field smaller"
+                        value={this.state.count}
+                        onChange={(e) => this.updateCount(e)}
+                        autoComplete="off"
+                        autoCorrect="off"
+                        autoCapitalize="off"
+                        spellCheck="false"
+                        placeholder="Number of tablets"
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group row">
+                    <label className="col-sm-6 col-form-label" htmlFor="countInput">Dose:</label>
+                    <div className="col-sm-6">
+                      <input
+                        id="countInput"
+                        type="number"
+                        className="form-input-field smaller"
+                        value={this.state.dose}
+                        onChange={(e) => this.updateDose(e)}
+                        autoComplete="off"
+                        autoCorrect="off"
+                        autoCapitalize="off"
+                        spellCheck="false"
+                        placeholder="Dose"
+                      />
+                    </div>
+                  </div>
                   <div id="button-bar" className="">
                     <button className="btn list-card-button marone" onClick={this.deleteMedication}>
                       <i
                         className="fas fa-times"
                       ></i>
                     </button>
+                    {!this.state.showSave ? (null) : (
+                    <button className="btn list-card-button off-green" onClick={this.saveMedication}>
+                      <i
+                        className="fas fa-save"
+                      ></i>
+                    </button>
+                    )}
+
                   </div>
                 </div>
               )
@@ -146,11 +198,12 @@ class Medication extends Component {
 }
 
 const UPDATE_MEDICATION_MUTATION = gql`
-  mutation UpdateMedicationMutation($id: ID!, $name: String!, $count: Int!){
-    updateMedication(id: $id, name: $name, count: $count){
+  mutation UpdateMedicationMutation($id: ID!, $name: String!, $count: Int!, $dose: Int!){
+    updateMedication(id: $id, name: $name, count: $count, dose: $dose){
       id
       name
       count
+      dose
     }
   }
 `
