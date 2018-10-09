@@ -9,8 +9,9 @@ type Query {
   schedules: [Schedule!]!
   userSchedules(id:ID!): [Schedule!]!
 }
+
 input MedicationIdInput {
-  id: ID
+  id: ID!
 }
 
 type Mutation {

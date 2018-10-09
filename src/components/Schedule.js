@@ -7,10 +7,100 @@ class Schedule extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      id: this.props.id,
       time: this.props.time,
-      medications: this.props.medications
+      medications: this.props.medications,
+      showAllMedications: false,
+      showSave: false,
     }
+    this.showAllMedications = this.showAllMedications.bind(this)
+    this.saveSchedule = this.saveSchedule.bind(this)
+  }
 
+  showAllMedications(){
+    this.setState({
+      showAllMedications: !this.state.showAllMedications
+    })
+  }
+
+  saveSchedule(e) {
+    const {id, time, medications} = this.state
+    const meds = medications.map(medication => {
+      return(
+        {
+          id:medication.id
+        }
+      )
+    })
+
+    const test = JSON.stringify({
+      query: UPDATE_SCHEDULE_MUTATION, 
+      variables: {
+        id,
+        time,
+        meds,
+      },
+    })
+    console.log(test)
+
+    fetch('http://localhost:4000', {
+      method: 'POST',
+      body: JSON.stringify({
+        query: UPDATE_SCHEDULE_MUTATION, 
+        variables: {
+          id,
+          time,
+          meds,
+        },
+      })
+    })  
+    .then(res => res.json())
+    .then(res => console.log(res.data));
+    // e.preventDefault()
+    // // // this.setState({
+    // // //   loading:true
+    // // // })
+    // this.props.updateSchedule({
+    //   variables: {
+    //     time,
+    //     meds
+    //   },
+    // }).then(
+    //   result => {
+    //     this.setState({
+    //       loading: false,
+    //       showSave:false
+    //     })
+    //   }
+    // ).catch(err => {
+    //   this.setState({
+    //     loading: false,
+    //     error: true
+    //   })
+    // })
+  }
+
+  updateTime(e) {
+    this.setState({
+      showSave: true
+    })
+    e.preventDefault()
+    const time = e.target.value
+    this.setState({
+      time: time
+    })
+  }
+
+  addMedicationToList(e, medication) {
+    e.preventDefault()
+    const medications = [
+      ...this.state.medications,
+      medication
+    ]
+    this.setState({
+      showSave: true,
+      medications
+    })
   }
 
   render() {
@@ -32,7 +122,7 @@ class Schedule extends Component {
                       type="number"
                       className="form-input-field text-look"
                       value={this.state.time}
-                      // onChange={(e) => this.updateName(e)}
+                      onChange={(e) => this.updateTime(e)}
                       autoComplete="off"
                       autoCorrect="off"
                       autoCapitalize="off"
@@ -49,7 +139,25 @@ class Schedule extends Component {
                         </div>
                       )
                       }
+                    <button className="btn list-card-button off-green" onClick={this.showAllMedications}>
+                      <i
+                        className="fas fa-plus"
+                      ></i>
+                    </button>                      
                   </div>
+                  {this.state.showAllMedications ? (
+                    <div>
+                      {this.props.all_medications.map(medication =>
+                        <div 
+                          className="nested-list-item"
+                          onClick={(e) => this.addMedicationToList(e, medication)}
+                        >
+                          <p>Name: {medication.name}</p>
+                          <p>Dose: {medication.dose}</p>
+                        </div>
+                      )}
+                    </div>
+                  ):(null)}
                   {/* <div className="form-group row">
                     <label className="col-sm-6 col-form-label" htmlFor="countInput">Left:</label>
                     <div className="col-sm-6">
@@ -91,7 +199,7 @@ class Schedule extends Component {
                       ></i>
                     </button>
                     {!this.state.showSave ? (null) : (
-                    <button className="btn list-card-button off-green" onClick={this.saveMedication}>
+                    <button className="btn list-card-button off-green" onClick={this.saveSchedule}>
                       <i
                         className="fas fa-save"
                       ></i>
@@ -120,15 +228,48 @@ class Schedule extends Component {
 //   }
 // `
 
-// const MEDICATION_QUERY = gql`
-//   query MedicationQuery {
-//     medications {
+const UPDATE_SCHEDULE_MUTATION = `
+  mutation UpdateScheduleMutation($id:ID!, $time:Int!, $medications:[MedicationIdInput]){
+    updateSchedule(id: $id, time:$time, medications: $medications){
+      id
+      time
+      medications {
+        id
+        name
+        count
+        dose
+        dispenser
+      }
+    }
+  }
+`.replace(/\r?\n|\r/g, "")
+
+// const UPDATE_SCHEDULE_MUTATION = gql`
+//   mutation UpdateScheduleMutation($id:ID!, $time:Int!, $medications:[MedicationIdInput]){
+//     updateSchedule(id: $id, time:$time, medications: $medications){
 //       id
-//       name
-//       count
+//       time
+//       medications {
+//         id
+//         name
+//         count
+//         dose
+//         dispenser
+//       }
 //     }
 //   }
 // `
+
+
+const MEDICATION_QUERY = gql`
+  query MedicationQuery {
+    medications {
+      id
+      name
+      count
+    }
+  }
+`
 
 // const DELETE_MEDICATION_MUTATION = gql`
 //   mutation DeleteMedicationMutation($id: ID!) {
@@ -141,8 +282,8 @@ class Schedule extends Component {
 // `
 
 export default compose(
-  // graphql(UPDATE_MEDICATION_MUTATION, {
-  //   name: 'updateMedication'
+  // graphql(UPDATE_SCHEDULE_MUTATION, {
+  //   name: 'updateSchedule'
   // }),
   // graphql(DELETE_MEDICATION_MUTATION, {
   //   name: 'deleteMedication'

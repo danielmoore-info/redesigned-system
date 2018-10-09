@@ -26,6 +26,7 @@ class ScheduleList extends Component {
                 <Schedule
                   key={schedule.id}
                   {...schedule}
+                  all_medications = {this.props.medicationQuery.medications}
                 />
             )}
         </div>
@@ -50,17 +51,25 @@ const SCHEDULE_QUERY = gql`
     }
   }
 `
+const MEDICATION_QUERY = gql`
+  query MedicationQuery {
+    medications {
+      id
+      name
+      count
+      dose
+      dispenser
+    }
+  }
+`
 
 export default compose(
   graphql(SCHEDULE_QUERY, {
     name: 'scheduleQuery',
-    options: {
-      fetchPolicy: 'network-only',
-    },
   }),
-  // graphql(ADD_MEDICATION_MUTATION, {
-  //   name: 'addMedication'
-  // }),
+  graphql(MEDICATION_QUERY, {
+    name: 'medicationQuery'
+  }),
   // graphql(MEDICATION_CHANGES_SUBSCRIPTION, {
   //   name: 'medicationChanges'
   // })
