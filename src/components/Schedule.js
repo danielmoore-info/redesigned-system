@@ -111,6 +111,7 @@ class Schedule extends Component {
     ]
     this.setState({
       showSave: true,
+      showAllMedications: false,
       medications
     })
   }
