@@ -23,8 +23,9 @@ class Schedule extends Component {
     })
   }
 
-  saveSchedule(e) {
+  async saveSchedule(e) {
     const {id, time, medications} = this.state
+    const token = this.props.token
     const meds = medications.map(medication => {
       return(
         {
@@ -32,30 +33,37 @@ class Schedule extends Component {
         }
       )
     })
-
-    const test = JSON.stringify({
-      query: UPDATE_SCHEDULE_MUTATION, 
-      variables: {
-        id,
-        time,
-        meds,
-      },
+    const query = JSON.stringify({
+      query: `mutation {
+        updateSchedule(
+          id: "${id}"
+          medications: [
+            ${meds}
+          ] 
+        ){
+          id
+          time
+        }
+      }`
     })
-    console.log(test)
-
-    fetch('http://localhost:4000', {
+    // console.log(test)
+    // console.log(this.props.token)
+    const response = fetch('http://localhost:4000', {
       method: 'POST',
-      body: JSON.stringify({
-        query: UPDATE_SCHEDULE_MUTATION, 
-        variables: {
-          id,
-          time,
-          meds,
-        },
-      })
-    })  
-    .then(res => res.json())
-    .then(res => console.log(res.data));
+      body: query,
+      headers: {
+        'Authorization': 'Bearer ' + token,
+        'content-type': 'application/json'
+      }
+    })
+
+    const responseJson = await response.json()
+    console.log(responseJson.data)
+    // .then(res => res.json())
+    // .then(res => console.log(res.data))
+    // .catch(err => {
+    //   console.log(err)
+    // })
     // e.preventDefault()
     // // // this.setState({
     // // //   loading:true
@@ -242,7 +250,7 @@ const UPDATE_SCHEDULE_MUTATION = `
       }
     }
   }
-`.replace(/\r?\n|\r/g, "")
+`
 
 // const UPDATE_SCHEDULE_MUTATION = gql`
 //   mutation UpdateScheduleMutation($id:ID!, $time:Int!, $medications:[MedicationIdInput]){

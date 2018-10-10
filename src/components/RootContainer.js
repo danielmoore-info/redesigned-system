@@ -147,10 +147,13 @@ class RootContainer extends Component {
             path="/medications"
             component={MedicationList}
           />
-          <ProtectedRoute
+          <Route
             token={this.state.token}
             path="/schedules"
-            component={ScheduleList}
+            // component={ScheduleList}
+            render={props => (
+              <ScheduleList token={this.state.token}/>
+            )}
           />
           <ProtectedRoute
             token={this.state.token}

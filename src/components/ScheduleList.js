@@ -11,11 +11,11 @@ class ScheduleList extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.location.key !== nextProps.location.key) {
-      this.props.draftsQuery.refetch()
-    } true
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   if (this.props.location.key !== nextProps.location.key) {
+  //     this.props.draftsQuery.refetch()
+  //   } true
+  // }
 
   render() {
     return (
@@ -27,6 +27,7 @@ class ScheduleList extends Component {
                   key={schedule.id}
                   {...schedule}
                   all_medications = {this.props.medicationQuery.medications}
+                  token = {this.props.token}
                 />
             )}
         </div>
