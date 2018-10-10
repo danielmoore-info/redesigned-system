@@ -15,6 +15,7 @@ class Schedule extends Component {
     }
     this.showAllMedications = this.showAllMedications.bind(this)
     this.saveSchedule = this.saveSchedule.bind(this)
+    this.deleteSchedule = this.deleteSchedule.bind(this)
   }
 
   showAllMedications(){
@@ -23,20 +24,47 @@ class Schedule extends Component {
     })
   }
 
+  async deleteSchedule() {
+    const id = this.props.id
+    this.props.deleteSchedule({
+      variables: {
+        id
+      },
+      update: (store, {data: {deleteSchedule}}) => {
+        const data = store.readQuery({query: SCHEDULE_QUERY})
+        const new_data = data.schedules.filter(
+          schedule => {
+            return schedule.id !== id
+          }
+        )
+        data.schedules = new_data
+        store.writeQuery({query: SCHEDULE_QUERY, data})
+      }
+    }).then(
+      result => {
+        this.setState({loading:false})
+      }
+    ).catch(err => {
+      this.setState({
+        loading: false,
+        error:true
+      })
+    })
+  }
+
   async saveSchedule(e) {
     const {id, time, medications} = this.state
     const token = this.props.token
     const meds = medications.map(medication => {
       return(
-        {
-          id:medication.id
-        }
+        `{id: "${medication.id}"}`
       )
     })
     const query = JSON.stringify({
       query: `mutation {
         updateSchedule(
           id: "${id}"
+          time: ${time}
           medications: [
             ${meds}
           ] 
@@ -46,46 +74,22 @@ class Schedule extends Component {
         }
       }`
     })
-    // console.log(test)
-    // console.log(this.props.token)
-    const response = fetch('http://localhost:4000', {
+    fetch('http://localhost:4000', {
       method: 'POST',
       body: query,
       headers: {
         'Authorization': 'Bearer ' + token,
         'content-type': 'application/json'
       }
+    }).then(
+      result => {
+        this.setState({
+          showSave:false
+        })
+      }
+    ).catch(err => {
+      console.log(err)
     })
-
-    const responseJson = await response.json()
-    console.log(responseJson.data)
-    // .then(res => res.json())
-    // .then(res => console.log(res.data))
-    // .catch(err => {
-    //   console.log(err)
-    // })
-    // e.preventDefault()
-    // // // this.setState({
-    // // //   loading:true
-    // // // })
-    // this.props.updateSchedule({
-    //   variables: {
-    //     time,
-    //     meds
-    //   },
-    // }).then(
-    //   result => {
-    //     this.setState({
-    //       loading: false,
-    //       showSave:false
-    //     })
-    //   }
-    // ).catch(err => {
-    //   this.setState({
-    //     loading: false,
-    //     error: true
-    //   })
-    // })
   }
 
   updateTime(e) {
@@ -135,7 +139,7 @@ class Schedule extends Component {
                       autoCorrect="off"
                       autoCapitalize="off"
                       spellCheck="false"
-                      placeholder="Medication name..."
+                      placeholder="Schedule time..."
                     />
                   </div>
                   <div className="medicationList">
@@ -166,42 +170,8 @@ class Schedule extends Component {
                       )}
                     </div>
                   ):(null)}
-                  {/* <div className="form-group row">
-                    <label className="col-sm-6 col-form-label" htmlFor="countInput">Left:</label>
-                    <div className="col-sm-6">
-                      <input
-                        id="countInput"
-                        type="number"
-                        className="form-input-field smaller"
-                        value={this.state.count}
-                        onChange={(e) => this.updateCount(e)}
-                        autoComplete="off"
-                        autoCorrect="off"
-                        autoCapitalize="off"
-                        spellCheck="false"
-                        placeholder="Number of tablets"
-                      />
-                    </div>
-                  </div>
-                  <div className="form-group row">
-                    <label className="col-sm-6 col-form-label" htmlFor="countInput">Dose:</label>
-                    <div className="col-sm-6">
-                      <input
-                        id="countInput"
-                        type="number"
-                        className="form-input-field smaller"
-                        value={this.state.dose}
-                        onChange={(e) => this.updateDose(e)}
-                        autoComplete="off"
-                        autoCorrect="off"
-                        autoCapitalize="off"
-                        spellCheck="false"
-                        placeholder="Dose"
-                      />
-                    </div>
-                  </div> */}
                   <div id="button-bar" className="">
-                    <button className="btn list-card-button marone" onClick={this.deleteMedication}>
+                    <button className="btn list-card-button marone" onClick={this.deleteSchedule}>
                       <i
                         className="fas fa-times"
                       ></i>
@@ -225,75 +195,35 @@ class Schedule extends Component {
   }
 }
 
-// const UPDATE_MEDICATION_MUTATION = gql`
-//   mutation UpdateMedicationMutation($id: ID!, $name: String!, $count: Int!, $dose: Int!){
-//     updateMedication(id: $id, name: $name, count: $count, dose: $dose){
-//       id
-//       name
-//       count
-//       dose
-//     }
-//   }
-// `
-
-const UPDATE_SCHEDULE_MUTATION = `
-  mutation UpdateScheduleMutation($id:ID!, $time:Int!, $medications:[MedicationIdInput]){
-    updateSchedule(id: $id, time:$time, medications: $medications){
+const SCHEDULE_QUERY = gql`
+  query ScheduleQuery {
+    schedules {
       id
       time
-      medications {
+      medications{
         id
         name
         count
         dose
         dispenser
       }
+      takenTime
     }
   }
 `
 
-// const UPDATE_SCHEDULE_MUTATION = gql`
-//   mutation UpdateScheduleMutation($id:ID!, $time:Int!, $medications:[MedicationIdInput]){
-//     updateSchedule(id: $id, time:$time, medications: $medications){
-//       id
-//       time
-//       medications {
-//         id
-//         name
-//         count
-//         dose
-//         dispenser
-//       }
-//     }
-//   }
-// `
-
-
-const MEDICATION_QUERY = gql`
-  query MedicationQuery {
-    medications {
+const DELETE_SCHEDULE_MUTATION = gql`
+  mutation DeleteScheduleMutation($id: ID!) {
+    deleteSchedule(id: $id) {
       id
-      name
-      count
     }
   }
 `
-
-// const DELETE_MEDICATION_MUTATION = gql`
-//   mutation DeleteMedicationMutation($id: ID!) {
-//     deleteMedication(id: $id){
-//       id
-//       name
-//       count
-//     }
-//   }
-// `
-
 export default compose(
   // graphql(UPDATE_SCHEDULE_MUTATION, {
   //   name: 'updateSchedule'
   // }),
-  // graphql(DELETE_MEDICATION_MUTATION, {
-  //   name: 'deleteMedication'
-  // })
+  graphql(DELETE_SCHEDULE_MUTATION, {
+    name: 'deleteSchedule'
+  })
 )(Schedule)

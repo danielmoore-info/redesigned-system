@@ -86,7 +86,6 @@ class Medication extends Component {
       },
       update: (store, { data: { deleteMedication } }) => {
         const data = store.readQuery({ query: MEDICATION_QUERY })
-        console.log(data)
         const new_data = data.medications.filter(
           medication => {
             return medication.id !== id
@@ -94,7 +93,6 @@ class Medication extends Component {
         )
         
         data.medications=new_data
-        console.log(data)
         store.writeQuery({query: MEDICATION_QUERY, data})
       }
     }).then(

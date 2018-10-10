@@ -46,7 +46,7 @@ const AddMedicationForm = ({addMedication=f=>f}) => {
               placeholder="Dose of medication"
             />
               <div id="button-bar" className="">
-                <button className="btn list-card-button off-green" onClick={this.deleteMedication}>
+                <button className="btn list-card-button off-green">
                   <i
                     className="fas fa-plus"
                   ></i>
