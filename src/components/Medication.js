@@ -11,7 +11,8 @@ class Medication extends Component {
       // loading: false,
       name: this.props.name,
       count: this.props.count,
-      dose: this.props.dose
+      dose: this.props.dose,
+      dispenser: this.props.dispenser
     }
     this.deleteMedication = this.deleteMedication.bind(this)
     this.saveMedication = this.saveMedication.bind(this)
@@ -19,7 +20,7 @@ class Medication extends Component {
   }
 
   saveMedication(e) {
-    const {name, count, dose} = this.state
+    const {name, count, dose, dispenser} = this.state
     e.preventDefault()
     // this.setState({
     //   loading:true
@@ -29,6 +30,7 @@ class Medication extends Component {
         name,
         count,
         dose,
+        dispenser
       },
     }).then(
       result => {
@@ -75,6 +77,17 @@ class Medication extends Component {
     const dose = e.target.value
     this.setState({
       dose: dose
+    })
+  }
+
+  updateDispenser(e){
+    this.setState({
+      showSave: true
+    })
+    e.preventDefault()
+    const dispenser = e.target.value
+    this.setState({
+      dispenser: dispenser
     })
   }
 
@@ -170,6 +183,23 @@ class Medication extends Component {
                       />
                     </div>
                   </div>
+                  <div className="form-group row">
+                    <label className="col-sm-6 col-form-label" htmlFor="dispenserInput">Dispenser:</label>
+                    <div className="col-sm-6">
+                      <input
+                        id="dispenserInput"
+                        type="number"
+                        className="form-input-field smaller"
+                        value={this.state.dispenser}
+                        onChange={(e) => this.updateDispenser(e)}
+                        autoComplete="off"
+                        autoCorrect="off"
+                        autoCapitalize="off"
+                        spellCheck="false"
+                        placeholder="Dose"
+                      />
+                    </div>
+                  </div>
                   <div id="button-bar" className="">
                     <button className="btn list-card-button marone" onClick={this.deleteMedication}>
                       <i
@@ -196,12 +226,13 @@ class Medication extends Component {
 }
 
 const UPDATE_MEDICATION_MUTATION = gql`
-  mutation UpdateMedicationMutation($id: ID!, $name: String!, $count: Int!, $dose: Int!){
-    updateMedication(id: $id, name: $name, count: $count, dose: $dose){
+  mutation UpdateMedicationMutation($id: ID!, $name: String!, $count: Int!, $dose: Int!, $dispenser: Int){
+    updateMedication(id: $id, name: $name, count: $count, dose: $dose, dispenser: $dispenser){
       id
       name
       count
       dose
+      dispenser
     }
   }
 `
@@ -212,6 +243,8 @@ const MEDICATION_QUERY = gql`
       id
       name
       count
+      dose
+      dispenser
     }
   }
 `

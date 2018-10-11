@@ -35,7 +35,7 @@ class MedicationList extends Component {
     })
   }
 
-  addMedication(name, count, dose) {
+  addMedication(name, count, dose, dispenser) {
     this.setState({
       loading: true
     })
@@ -43,7 +43,8 @@ class MedicationList extends Component {
       variables: {
         name,
         count,
-        dose
+        dose,
+        dispenser
       },
       update: (store, { data: { createMedication } }) => {
         const data = store.readQuery({ query: MEDICATION_QUERY })
@@ -130,6 +131,8 @@ subscription {
       id
       name
       count
+      dose
+      dispenser
     }
   }
 }
@@ -142,17 +145,19 @@ const MEDICATION_QUERY = gql`
       name
       count
       dose
+      dispenser
     }
   }
 `
 
 const ADD_MEDICATION_MUTATION = gql`
-  mutation AddMedicationMutation ($name: String!, $count: Int!, $dose: Int!) {
-    createMedication(name: $name, count: $count, dose: $dose){
+  mutation AddMedicationMutation ($name: String!, $count: Int!, $dose: Int!, $dispenser: Int) {
+    createMedication(name: $name, count: $count, dose: $dose, dispenser:$dispenser){
       id
       name
       count
       dose
+      dispenser
     }
   }
 `

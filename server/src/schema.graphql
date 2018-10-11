@@ -21,8 +21,8 @@ type Mutation {
   publish(id: ID!): Post!
   deletePost(id: ID!): Post!
   createMedication(name: String!, count: Int!, dispenser: Int, dose: Int!): Medication!
-  updateMedication(id: ID!, name: String, count: Int, dose: Int): Medication!
-  updatePatientMedication(id: ID!, name: String, count: Int, dose: Int, patientId:ID!): Medication!
+  updateMedication(id: ID!, name: String, count: Int, dispenser: Int, dose: Int): Medication!
+  updatePatientMedication(id: ID!, name: String, count: Int, dose: Int, dispenser: Int patientId:ID!): Medication!
   deleteMedication(id: ID!): Medication!
   createSchedule(time: Int!, medications:[MedicationIdInput], takenTime: DateTime): Schedule!
   updateSchedule(id: ID!, time: Int, medications:[MedicationIdInput], takenTime:DateTime): Schedule!
