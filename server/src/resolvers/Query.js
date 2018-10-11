@@ -48,7 +48,8 @@ const Query = {
       },
     }
     return ctx.db.query.schedules({
-      where
+      where,
+      orderBy:'time_ASC'
     }, info)
   },
 
@@ -59,7 +60,8 @@ const Query = {
       },
     }
     return ctx.db.query.schedules({
-      where
+      where,
+      orderBy:'time_ASC'
     }, info)
   }
 }

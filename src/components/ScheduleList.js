@@ -3,6 +3,7 @@ import { graphql, compose } from 'react-apollo'
 import { gql } from 'apollo-boost'
 import Schedule from './Schedule';
 import AddScheduleForm from './AddScheduleForm';
+import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup'
 
 class ScheduleList extends Component {
   constructor(props) {
@@ -54,8 +55,8 @@ class ScheduleList extends Component {
     const {showAddForm} = this.state
     return (
       <div className="container">
-        <div className="row margin-bottom function-card">
-          <div className="col-md-10 offset-md-1">
+        <div className="row function-card">
+          <div className="col-md-6 offset-md-3">
             <button
               onClick={this.toggleScheduleForm}
               className="btn list-card-button off-green margin-bottom"
@@ -65,18 +66,25 @@ class ScheduleList extends Component {
           </div>
         </div>      
         <div className="row">
-          {showAddForm ? (
+        <div className={"col-md-6 offset-md-3 margin-bottom " + (showAddForm? '':'hide')}>
+          <div className={"list-card "}>
+            <div className="card-body">
               <AddScheduleForm addSchedule={this.addSchedule} />
-          ) : (null)}        
+            </div>
+          </div>
+        </div>
+        <CSSTransitionGroup transitionName="example" transitionEnterTimeout={700} transitionLeaveTimeout={700}>
           {this.props.scheduleQuery.schedules &&
               this.props.scheduleQuery.schedules.map(schedule => 
                 <Schedule
+                  className=""
                   key={schedule.id}
                   {...schedule}
                   all_medications = {this.props.medicationQuery.medications}
                   token = {this.props.token}
                 />
             )}
+        </CSSTransitionGroup>
         </div>
       </div>
     )

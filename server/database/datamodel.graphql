@@ -24,7 +24,7 @@ type Medication {
   name: String!
   count: Int!
   schedules: [Schedule!]!
-  dispenser: Int @unique
+  dispenser: Int
   dose: Int!
 }
 

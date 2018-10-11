@@ -34,10 +34,18 @@ class RootContainer extends Component {
   constructor(props) {
     super(props)
     this.refreshTokenFn = this.refreshTokenFn.bind(this)
+    this.toggleNav = this.toggleNav.bind(this)
 
     this.state = {
       token: props.token,
+      navExpanded: true
     }
+  }
+
+  toggleNav() {
+    this.setState({
+      navExpanded: !this.state.navExpanded
+    })
   }
 
   refreshTokenFn(data = {}) {
@@ -88,13 +96,16 @@ class RootContainer extends Component {
   }
 
   renderNavBar() {
+    const {navExpanded} = this.state
+    const classOne = navExpanded ? 'collapse navbar-collapse' : 'collapse navbar-collapse show'
+    const classTwo = navExpanded ? 'navbar-toggler navbar-toggler-right collapsed' : 'navbar-toggler navbar-toggler-right'
     return (
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <a className="navbar-brand" href="#">Navbar</a>
-        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button onClick={this.toggleNav} className={`${classTwo}`} type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
-        <div className="collapse navbar-collapse" id="navbarNav">
+        <div className={`${classOne}`} id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
               <NavLink

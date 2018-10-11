@@ -9,9 +9,6 @@ const AddScheduleForm = ({addSchedule=f=>f}) => {
   }
 
   return(
-  <div className="col-md-4 margin-bottom">
-    <div className="list-card">
-      <div className="card-body">
         <form onSubmit={submit}>
           <div className="form-group">
             <input
@@ -34,9 +31,6 @@ const AddScheduleForm = ({addSchedule=f=>f}) => {
             </div>       
           </div>
         </form>
-      </div>
-    </div>
-  </div>
   )
 }
 

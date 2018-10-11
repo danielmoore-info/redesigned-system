@@ -86,7 +86,7 @@ class MedicationList extends Component {
     return (
       <div className="container">
         <div className="row margin-bottom function-card">
-          <div className="col-md-10 offset-md-1">
+          <div className="col-md-6 offset-md-3">
             <button
               onClick={this.showMedicationForm}
               className="btn list-card-button off-green margin-bottom"
