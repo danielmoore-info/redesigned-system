@@ -45,6 +45,28 @@ const schedule = {
       info
     )
   },
+  async updatePatientSchedule(parent, {id, time, takenTime, patientId}, ctx, info) {
+    const userId = getUserId(ctx)
+    const scheduleExists = await ctx.db.exists.Schedule({
+      id,
+      patient: {
+        id: patientId
+      },
+    })
+    if (!scheduleExists) {
+      throw new Error(`Schedule not found`)
+    }
+    return ctx.db.mutation.updateSchedule(
+      {
+        where:{id},
+        data: {
+          time: time,
+          takenTime: takenTime
+        }
+      },
+      info
+    )
+  },
   async deleteSchedule(parent, {id}, ctx, info) {
     const userId = getUserId(ctx)
     const scheduleExists = await ctx.db.exists.Schedule({

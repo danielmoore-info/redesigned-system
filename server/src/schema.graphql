@@ -26,6 +26,7 @@ type Mutation {
   deleteMedication(id: ID!): Medication!
   createSchedule(time: Int!, medications:[MedicationIdInput], takenTime: DateTime): Schedule!
   updateSchedule(id: ID!, time: Int, medications:[MedicationIdInput], takenTime:DateTime): Schedule!
+  updatePatientSchedule(id: ID!, time: Int, takenTime:DateTime, patientId:ID!): Schedule!
   deleteSchedule(id: ID!): Schedule!
 }
 
