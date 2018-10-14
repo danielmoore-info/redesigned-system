@@ -55,6 +55,8 @@ class ScheduleList extends Component {
     const {showAddForm} = this.state
     return (
       <div className="container">
+        <h1>Schedules</h1>
+        <hr/>      
         <div className="row function-card">
           <div className="col-md-6 offset-md-3">
             <button

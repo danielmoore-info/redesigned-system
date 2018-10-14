@@ -12,15 +12,23 @@ class Schedule extends Component {
       medications: this.props.medications,
       showAllMedications: false,
       showSave: false,
+      showEdit: false
     }
     this.showAllMedications = this.showAllMedications.bind(this)
     this.saveSchedule = this.saveSchedule.bind(this)
     this.deleteSchedule = this.deleteSchedule.bind(this)
+    this.toggleShowEdit = this.toggleShowEdit.bind(this)
   }
 
   showAllMedications() {
     this.setState({
       showAllMedications: !this.state.showAllMedications
+    })
+  }
+
+  toggleShowEdit() {
+    this.setState({
+      showEdit: !this.state.showEdit
     })
   }
 
@@ -67,7 +75,7 @@ class Schedule extends Component {
           time: ${time}
           medications: [
             ${meds}
-          ] 
+          ]                     
         ){
           id
           time
@@ -84,7 +92,8 @@ class Schedule extends Component {
     }).then(
       result => {
         this.setState({
-          showSave: false
+          showSave: false,
+          showEdit: false
         })
       }
     ).catch(err => {
@@ -129,54 +138,9 @@ class Schedule extends Component {
               ) :
               (
                 <div>
-                  <div className="form-group row">
-                    <label className="col-sm-6 col-form-label" htmlFor="timeInput">Hour:</label>
-                    <div className="col-sm-6">
-                      <input
-                        id="timeInput"
-                        type="number"
-                        className="form-input-field smaller"
-                        value={this.state.time}
-                        onChange={(e) => this.updateTime(e)}
-                        autoComplete="off"
-                        autoCorrect="off"
-                        autoCapitalize="off"
-                        spellCheck="false"
-                        placeholder="Schedule time..."
-                      />
-                    </div>
+                  <div>
+                    <h4>Schedule for hour {this.props.time}</h4>
                   </div>
-                  <label className="col-form-label" htmlFor="timeInput">Medications:</label>
-                  <div className="medicationList">
-                    {this.state.medications &&
-                      this.state.medications.map(medication =>
-                        <div className="nested-list-item">
-                          <p>Name: {medication.name}</p>
-                          <p>Dose: {medication.dose}</p>
-                        </div>
-                      )
-                    }
-                      <div className="customf">
-                        <button id="cunt" className="btn list-card-button grey-blue" onClick={this.showAllMedications}>
-                          <i
-                            className="fas fa-plus"
-                          ></i>
-                        </button>
-                      </div>
-                  </div>
-                  {this.state.showAllMedications ? (
-                    <div>
-                      {this.props.all_medications.map(medication =>
-                        <div
-                          className="nested-list-item"
-                          onClick={(e) => this.addMedicationToList(e, medication)}
-                        >
-                          <p>Name: {medication.name}</p>
-                          <p>Dose: {medication.dose}</p>
-                        </div>
-                      )}
-                    </div>
-                  ) : (null)}
                   <div id="button-bar" className="">
                     <button className="btn list-card-button marone" onClick={this.deleteSchedule}>
                       <i
@@ -190,8 +154,62 @@ class Schedule extends Component {
                         ></i>
                       </button>
                     )}
-
+                    <button className="btn list-card-button" onClick={this.toggleShowEdit}>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
                   </div>
+                  {this.state.showEdit ? (
+                    <div>
+                      <div className="form-group row">
+                        <label className="col-sm-6 col-form-label" htmlFor="timeInput">Hour:</label>
+                        <div className="col-sm-6">
+                          <input
+                            id="timeInput"
+                            type="number"
+                            className="form-input-field smaller"
+                            value={this.state.time}
+                            onChange={(e) => this.updateTime(e)}
+                            autoComplete="off"
+                            autoCorrect="off"
+                            autoCapitalize="off"
+                            spellCheck="false"
+                            placeholder="Schedule time..."
+                          />
+                        </div>
+                      </div>
+                      <label className="col-form-label" htmlFor="timeInput">Medications:</label>
+                      <div className="medicationList">
+                        {this.state.medications &&
+                          this.state.medications.map(medication =>
+                            <div className="nested-list-item">
+                              <p>Name: {medication.name}</p>
+                              <p>Dose: {medication.dose}</p>
+                            </div>
+                          )
+                        }
+                          <div className="customf">
+                            <button id="cunt" className="btn list-card-button" onClick={this.showAllMedications}>
+                              <i
+                                className="fas fa-plus"
+                              ></i>
+                            </button>
+                          </div>
+                      </div>
+                    </div>
+                  ) : (null)}
+                  {this.state.showAllMedications ? (
+                    <div>
+                      {this.props.all_medications.map(medication =>
+                        <div
+                          className="nested-list-item"
+                          onClick={(e) => this.addMedicationToList(e, medication)}
+                        >
+                          <p>Name: {medication.name}</p>
+                          <p>Dose: {medication.dose}</p>
+                        </div>
+                      )}
+                    </div>
+                  ) : (null)}
                 </div>
               )
             }

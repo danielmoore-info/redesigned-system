@@ -12,15 +12,23 @@ class Medication extends Component {
       name: this.props.name,
       count: this.props.count,
       dose: this.props.dose,
-      dispenser: this.props.dispenser
+      dispenser: this.props.dispenser,
+      showEdit: false
     }
     this.deleteMedication = this.deleteMedication.bind(this)
     this.saveMedication = this.saveMedication.bind(this)
+    this.toggleShowEdit = this.toggleShowEdit.bind(this)
     this.initialState = this.state
   }
 
+  toggleShowEdit() {
+    this.setState({
+      showEdit: !this.state.showEdit
+    })
+  }
+
   saveMedication(e) {
-    const {name, count, dose, dispenser} = this.state
+    const { name, count, dose, dispenser } = this.state
     e.preventDefault()
     // this.setState({
     //   loading:true
@@ -36,7 +44,8 @@ class Medication extends Component {
       result => {
         this.setState({
           loading: false,
-          showSave:false
+          showSave: false,
+          showEdit: false,
         })
       }
     ).catch(err => {
@@ -69,7 +78,7 @@ class Medication extends Component {
     })
   }
 
-  updateDose(e){
+  updateDose(e) {
     this.setState({
       showSave: true
     })
@@ -80,7 +89,7 @@ class Medication extends Component {
     })
   }
 
-  updateDispenser(e){
+  updateDispenser(e) {
     this.setState({
       showSave: true
     })
@@ -104,9 +113,9 @@ class Medication extends Component {
             return medication.id !== id
           }
         )
-        
-        data.medications=new_data
-        store.writeQuery({query: MEDICATION_QUERY, data})
+
+        data.medications = new_data
+        store.writeQuery({ query: MEDICATION_QUERY, data })
       }
     }).then(
       result => {
@@ -135,70 +144,11 @@ class Medication extends Component {
               ) :
               (
                 <div>
-                  <div className="form-group">
-                    <input
-                      id="nameInput"
-                      type="text"
-                      className="form-input-field text-look"
-                      value={this.state.name}
-                      onChange={(e) => this.updateName(e)}
-                      autoComplete="off"
-                      autoCorrect="off"
-                      autoCapitalize="off"
-                      spellCheck="false"
-                      placeholder="Medication name..."
-                    />
-                  </div>
-                  <div className="form-group row">
-                    <label className="col-sm-6 col-form-label" htmlFor="countInput">Left:</label>
-                    <div className="col-sm-6">
-                      <input
-                        id="countInput"
-                        type="number"
-                        className="form-input-field smaller"
-                        value={this.state.count}
-                        onChange={(e) => this.updateCount(e)}
-                        autoComplete="off"
-                        autoCorrect="off"
-                        autoCapitalize="off"
-                        spellCheck="false"
-                        placeholder="Number of tablets"
-                      />
-                    </div>
-                  </div>
-                  <div className="form-group row">
-                    <label className="col-sm-6 col-form-label" htmlFor="countInput">Dose:</label>
-                    <div className="col-sm-6">
-                      <input
-                        id="countInput"
-                        type="number"
-                        className="form-input-field smaller"
-                        value={this.state.dose}
-                        onChange={(e) => this.updateDose(e)}
-                        autoComplete="off"
-                        autoCorrect="off"
-                        autoCapitalize="off"
-                        spellCheck="false"
-                        placeholder="Dose"
-                      />
-                    </div>
-                  </div>
-                  <div className="form-group row">
-                    <label className="col-sm-6 col-form-label" htmlFor="dispenserInput">Dispenser:</label>
-                    <div className="col-sm-6">
-                      <input
-                        id="dispenserInput"
-                        type="number"
-                        className="form-input-field smaller"
-                        value={this.state.dispenser}
-                        onChange={(e) => this.updateDispenser(e)}
-                        autoComplete="off"
-                        autoCorrect="off"
-                        autoCapitalize="off"
-                        spellCheck="false"
-                        placeholder="Dose"
-                      />
-                    </div>
+                  <div>
+                    <h4>{this.props.name}</h4>
+                    <p>{this.props.count} pills remaining</p>
+                    <p>{this.props.dose} pills in each dose</p>
+                    <p>Currently assigned to dispenser {this.props.dispenser}</p>
                   </div>
                   <div id="button-bar" className="">
                     <button className="btn list-card-button marone" onClick={this.deleteMedication}>
@@ -207,14 +157,85 @@ class Medication extends Component {
                       ></i>
                     </button>
                     {!this.state.showSave ? (null) : (
-                    <button className="btn list-card-button off-green" onClick={this.saveMedication}>
-                      <i
-                        className="fas fa-save"
-                      ></i>
-                    </button>
+                      <button className="btn list-card-button off-green" onClick={this.saveMedication}>
+                        <i
+                          className="fas fa-save"
+                        ></i>
+                      </button>
                     )}
-
+                    <button className="btn list-card-button" onClick={this.toggleShowEdit}>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
                   </div>
+                  {this.state.showEdit ? (
+                    <div>
+                      <div className="form-group">
+                        <input
+                          id="nameInput"
+                          type="text"
+                          className="form-input-field text-look"
+                          value={this.state.name}
+                          onChange={(e) => this.updateName(e)}
+                          autoComplete="off"
+                          autoCorrect="off"
+                          autoCapitalize="off"
+                          spellCheck="false"
+                          placeholder="Medication name..."
+                        />
+                      </div>
+                      <div className="form-group row">
+                        <label className="col-sm-6 col-form-label" htmlFor="countInput">Left:</label>
+                        <div className="col-sm-6">
+                          <input
+                            id="countInput"
+                            type="number"
+                            className="form-input-field smaller"
+                            value={this.state.count}
+                            onChange={(e) => this.updateCount(e)}
+                            autoComplete="off"
+                            autoCorrect="off"
+                            autoCapitalize="off"
+                            spellCheck="false"
+                            placeholder="Number of tablets"
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group row">
+                        <label className="col-sm-6 col-form-label" htmlFor="countInput">Dose:</label>
+                        <div className="col-sm-6">
+                          <input
+                            id="countInput"
+                            type="number"
+                            className="form-input-field smaller"
+                            value={this.state.dose}
+                            onChange={(e) => this.updateDose(e)}
+                            autoComplete="off"
+                            autoCorrect="off"
+                            autoCapitalize="off"
+                            spellCheck="false"
+                            placeholder="Dose"
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group row">
+                        <label className="col-sm-6 col-form-label" htmlFor="dispenserInput">Dispenser:</label>
+                        <div className="col-sm-6">
+                          <input
+                            id="dispenserInput"
+                            type="number"
+                            className="form-input-field smaller"
+                            value={this.state.dispenser}
+                            onChange={(e) => this.updateDispenser(e)}
+                            autoComplete="off"
+                            autoCorrect="off"
+                            autoCapitalize="off"
+                            spellCheck="false"
+                            placeholder="Dose"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ) : (null)}
                 </div>
               )
             }

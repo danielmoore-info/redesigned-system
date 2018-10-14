@@ -12,46 +12,54 @@ class SignupPage extends Component {
   }
 
   render() {
-    return (
-      <div className="pa4 flex justify-center bg-white">
-        <form onSubmit={this._signup}>
-          <h3>
-            Already have an account!!! <a href="/login"> Login</a>
-          </h3>
-          <input
-            autoFocus
-            className="w-100 pa2 mv2 br2 b--black-20 bw1"
-            placeholder="Name"
-            type="text"
-            onChange={e => this.setState({ name: e.target.value })}
-            value={this.state.name}
-          />
-          <input
-            autoFocus
-            className="w-100 pa2 mv2 br2 b--black-20 bw1"
-            placeholder="Email"
-            type="email"
-            onChange={e => this.setState({ email: e.target.value })}
-            value={this.state.email}
-          />
-          <input
-            autoFocus
-            className="w-100 pa2 mv2 br2 b--black-20 bw1"
-            placeholder="Enter Password"
-            type="password"
-            onChange={e => this.setState({ password: e.target.value })}
-            value={this.state.password}
-          />
-
-          <input
-            className={`pa3 bg-black-10 dim pointer}`}
-            disabled={
-              !this.state.email || !this.state.name || !this.state.password
-            }
-            type="submit"
-            value="Sign Up"
-          />
-        </form>
+    return(
+      <div className="container">
+          <h1>Signup</h1>
+          <hr/>      
+        <div className="row">
+          <div className="col-md-6 offset-md-3">
+            <h3>Already have an accout? <a href="/login">Login</a></h3>
+            <form onSubmit={this._signup}>
+              <div className="form-group">
+                <input
+                  autoFocus
+                  className="form-input-field"
+                  placeholder="Name"
+                  type="text"
+                  onChange={e => this.setState({ name: e.target.value })}
+                  value={this.state.name}
+                />
+              </div>
+              <div className="form-group">
+                <input
+                  autoFocus
+                  className="form-input-field"
+                  placeholder="Email"
+                  type="email"
+                  onChange={e => this.setState({ email: e.target.value })}
+                  value={this.state.email}
+                />
+              </div>
+              <div className="form-group">
+                <input
+                  autoFocus
+                  className="form-input-field"
+                  placeholder="Enter Password"
+                  type="password"
+                  onChange={e => this.setState({ password: e.target.value })}
+                  value={this.state.password}
+                />
+              </div>
+              <div className="center-me">
+                  <button
+                    className="btn special-button"
+                  >
+                    Sign up
+                  </button>
+                </div>
+            </form>
+          </div>
+        </div>
       </div>
     )
   }

@@ -11,39 +11,46 @@ class LoginPage extends Component {
   }
 
   render() {
-    return (
-      <div className="pa4 flex justify-center bg-white">
-        <div>
-          <h3>
-            Don't have an account? <a href="/signup">Signup</a>
-          </h3>
-          <input
-            autoFocus
-            className="w-100 pa2 mv2 br2 b--black-20 bw1"
-            placeholder="Email"
-            type="email"
-            onChange={e => this.setState({ email: e.target.value })}
-            value={this.state.email}
-          />
-          <input
-            autoFocus
-            className="w-100 pa2 mv2 br2 b--black-20 bw1"
-            placeholder="Password"
-            type="password"
-            onChange={e => this.setState({ password: e.target.value })}
-            value={this.state.password}
-          />
-          {this.state.email &&
-            this.state.password && (
-              <button
-                className="pa3 bg-black-10 bn dim ttu pointer"
-                onClick={this._login}
-              >
-                Log in
-              </button>
-            )}
+    return(
+      <div className="container">
+          <h1>Login</h1>
+          <hr/>      
+        <div className="row">
+          <div className="col-md-6 offset-md-3">
+            <h3>Don't have an account? <a href="/signup">Signup</a></h3>
+              <form>
+                <div className="form-group">
+                  <input
+                    autoFocus
+                    className="form-input-field"
+                    placeholder="Email"
+                    type="email"
+                    onChange={e => this.setState({ email: e.target.value })}
+                    value={this.state.email}
+                  />
+                </div>
+                <div className="form-group">
+                  <input
+                    autoFocus
+                    className="form-input-field"
+                    placeholder="Password"
+                    type="password"
+                    onChange={e => this.setState({ password: e.target.value })}
+                    value={this.state.password}
+                  />
+                </div>
+                <div className="center-me">
+                  <button
+                    className="btn special-button"
+                    onclick={this._login}
+                  >
+                    log in
+                  </button>
+                </div>
+              </form>
+          </div>
+          </div>
         </div>
-      </div>
     )
   }
 

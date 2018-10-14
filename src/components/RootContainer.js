@@ -100,23 +100,13 @@ class RootContainer extends Component {
     const classOne = navExpanded ? 'collapse navbar-collapse' : 'collapse navbar-collapse show'
     const classTwo = navExpanded ? 'navbar-toggler navbar-toggler-right collapsed' : 'navbar-toggler navbar-toggler-right'
     return (
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a className="navbar-brand" href="#">Navbar</a>
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark margin-bottom">
+        <a className="navbar-brand" href="/">Magic Meds</a>
         <button onClick={this.toggleNav} className={`${classTwo}`} type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className={`${classOne}`} id="navbarNav">
           <ul className="navbar-nav">
-            <li className="nav-item">
-              <NavLink
-                to="/patients"
-                className="nav-link"
-                activeClassName="active"
-                exact={true}
-              >
-                Patients
-              </NavLink>
-            </li>
             <li className="nav-item">
               <NavLink
                 to="/medications"
@@ -135,6 +125,26 @@ class RootContainer extends Component {
                 exact={true}
               >
                 Schedules
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink
+                to="/login"
+                className="nav-link"
+                activeClassName="active"
+                exact={true}
+              >
+                Login
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink
+                to="/signup"
+                className="nav-link"
+                activeClassName="active"
+                exact={true}
+              >
+                Signup
               </NavLink>
             </li>
           </ul>

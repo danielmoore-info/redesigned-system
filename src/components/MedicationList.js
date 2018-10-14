@@ -3,6 +3,7 @@ import Medication from './Medication'
 import AddMedicationForm from './AddMedicationForm'
 import { graphql, compose } from 'react-apollo'
 import { gql } from 'apollo-boost'
+import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup'
 // import {API_ENDPOINT} from '../Constants'
 
 class MedicationList extends Component {
@@ -21,11 +22,11 @@ class MedicationList extends Component {
     this.addMedication = this.addMedication.bind(this)
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.location.key !== nextProps.location.key) {
-      this.props.draftsQuery.refetch()
-    } true
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   if (this.props.location.key !== nextProps.location.key) {
+  //     this.props.draftsQuery.refetch()
+  //   } true
+  // }
 
 
 
@@ -85,6 +86,8 @@ class MedicationList extends Component {
     this._subsribeToChanges(subscribeToMore)
     return (
       <div className="container">
+        <h1>Medications</h1>
+        <hr/>
         <div className="row margin-bottom function-card">
           <div className="col-md-6 offset-md-3">
             <button
@@ -105,19 +108,21 @@ class MedicationList extends Component {
           {showAddForm ? (
             <AddMedicationForm addMedication={this.addMedication} />
           ) : (null)}
-          {this.props.medicationQuery.medications &&
-            this.props.medicationQuery.medications.map(medication => {
-              return (medication.name.toLowerCase().search(query.toLowerCase()) !== -1) ?
-                (
-                  <Medication
-                    key={medication.id} {...medication}
-                  />
-                ) : (
-                  null
-                )
-              // )
-            }
-            )}
+          <CSSTransitionGroup transitionName="example" transitionEnterTimeout={700} transitionLeaveTimeout={700}>
+            {this.props.medicationQuery.medications &&
+              this.props.medicationQuery.medications.map(medication => {
+                return (medication.name.toLowerCase().search(query.toLowerCase()) !== -1) ?
+                  (
+                    <Medication
+                      key={medication.id} {...medication}
+                    />
+                  ) : (
+                    null
+                  )
+                // )
+              }
+              )}
+          </CSSTransitionGroup>
         </div>
       </div>
     )
