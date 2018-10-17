@@ -1,5 +1,5 @@
 # source: http://prisma:4466
-# timestamp: Fri Oct 05 2018 03:00:35 GMT+0000 (UTC)
+# timestamp: Tue Oct 16 2018 23:46:32 GMT+0000 (UTC)
 
 type AggregateMedication {
   count: Int!
@@ -386,7 +386,6 @@ input MedicationWhereInput {
 
 input MedicationWhereUniqueInput {
   id: ID
-  dispenser: Int
 }
 
 type Mutation {

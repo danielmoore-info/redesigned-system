@@ -18,7 +18,7 @@ class LoginPage extends Component {
         <div className="row">
           <div className="col-md-6 offset-md-3">
             <h3>Don't have an account? <a href="/signup">Signup</a></h3>
-              <form>
+              <form onSubmit={this._login}>
                 <div className="form-group">
                   <input
                     autoFocus
@@ -42,7 +42,7 @@ class LoginPage extends Component {
                 <div className="center-me">
                   <button
                     className="btn special-button"
-                    onclick={this._login}
+                    // onClick={this._login}
                   >
                     log in
                   </button>
@@ -55,6 +55,7 @@ class LoginPage extends Component {
   }
 
   _login = async e => {
+    e.preventDefault()
     const { email, password } = this.state
     this.props
       .loginMutation({

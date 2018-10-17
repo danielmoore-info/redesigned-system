@@ -16,7 +16,7 @@ import SignupPage from './SignupPage'
 import PageNotFound from './PageNotFound'
 import LogoutPage from './LogoutPage'
 import MedicationList from './MedicationList'
-import ScheduleList from './ScheduleList';
+import ScheduleList from './ScheduleList'
 import { AUTH_TOKEN } from '../constant'
 import { isTokenExpired } from '../helper/jwtHelper'
 import { graphql } from 'react-apollo'
@@ -127,16 +127,40 @@ class RootContainer extends Component {
                 Schedules
               </NavLink>
             </li>
-            <li className="nav-item">
-              <NavLink
-                to="/login"
-                className="nav-link"
-                activeClassName="active"
-                exact={true}
-              >
-                Login
-              </NavLink>
-            </li>
+            {this.state.token ? (
+              <li className="nav-item">
+                <div 
+                  onClick={() => {
+                    this.refreshTokenFn &&
+                      this.refreshTokenFn({
+                        [AUTH_TOKEN]: null
+                      })
+                      window.location.href = '/'
+                  }}
+                >
+                  <NavLink
+                    to="/logout"
+                    className="nav-link"
+                    activeClassName="active"
+                    exact={true}
+                  >
+                    Logout
+                  </NavLink>
+                </div>
+              </li>
+
+            ) : (
+              <li className="nav-item">
+                <NavLink
+                  to="/login"
+                  className="nav-link"
+                  activeClassName="active"
+                  exact={true}
+                >
+                  Login
+                </NavLink>
+              </li>
+            )}
             <li className="nav-item">
               <NavLink
                 to="/signup"
