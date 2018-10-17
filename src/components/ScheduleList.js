@@ -4,6 +4,7 @@ import { gql } from 'apollo-boost'
 import Schedule from './Schedule';
 import AddScheduleForm from './AddScheduleForm';
 import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup'
+const loader = require('../assets/spinner.svg')
 
 class ScheduleList extends Component {
   constructor(props) {
@@ -87,18 +88,33 @@ class ScheduleList extends Component {
               </div>
             </div>
           </div>
-          <CSSTransitionGroup transitionName="example" transitionEnterTimeout={700} transitionLeaveTimeout={700}>
-            {this.props.scheduleQuery.schedules &&
-                this.props.scheduleQuery.schedules.map(schedule => 
-                  <Schedule
-                    className=""
-                    key={schedule.id}
-                    {...schedule}
-                    all_medications = {this.props.medicationQuery.medications}
-                    token = {this.props.token}
-                  />
-              )}
-          </CSSTransitionGroup>
+        </div>
+        <div className="row">
+          {this.props.scheduleQuery.loading ? (
+            <img
+              className="center-me"
+              height="100px"
+              width="100px"
+              src={
+                loader
+              }
+              alt="loading icon"
+            />
+
+          ) : (
+            <CSSTransitionGroup transitionName="example" transitionEnterTimeout={700} transitionLeaveTimeout={700}>
+              {this.props.scheduleQuery.schedules &&
+                  this.props.scheduleQuery.schedules.map(schedule => 
+                    <Schedule
+                      className=""
+                      key={schedule.id}
+                      {...schedule}
+                      all_medications = {this.props.medicationQuery.medications}
+                      token = {this.props.token}
+                    />
+                )}
+            </CSSTransitionGroup>
+          )}
         </div>
       </div>
     )

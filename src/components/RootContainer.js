@@ -107,26 +107,30 @@ class RootContainer extends Component {
         </button>
         <div className={`${classOne}`} id="navbarNav">
           <ul className="navbar-nav">
-            <li className="nav-item">
-              <NavLink
-                to="/medications"
-                className="nav-link"
-                activeClassName="active"
-                exact={true}
-              >
-                Medications
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink
-                to="/schedules"
-                className="nav-link"
-                activeClassName="active"
-                exact={true}
-              >
-                Schedules
-              </NavLink>
-            </li>
+            {this.state.token ? (
+              <li className="nav-item">
+                <NavLink
+                  to="/medications"
+                  className="nav-link"
+                  activeClassName="active"
+                  exact={true}
+                >
+                  Medications
+                </NavLink>
+              </li>              
+            ) : (null)}
+            {this.state.token ? (
+              <li className="nav-item">
+                <NavLink
+                  to="/schedules"
+                  className="nav-link"
+                  activeClassName="active"
+                  exact={true}
+                >
+                  Schedules
+                </NavLink>
+              </li>
+            ):(null)}
             {this.state.token ? (
               <li className="nav-item">
                 <div 
@@ -161,16 +165,18 @@ class RootContainer extends Component {
                 </NavLink>
               </li>
             )}
-            <li className="nav-item">
-              <NavLink
-                to="/signup"
-                className="nav-link"
-                activeClassName="active"
-                exact={true}
-              >
-                Signup
-              </NavLink>
-            </li>
+            {this.state.token ? (null) : (
+              <li className="nav-item">
+                <NavLink
+                  to="/signup"
+                  className="nav-link"
+                  activeClassName="active"
+                  exact={true}
+                >
+                  Signup
+                </NavLink>
+              </li>
+            )}
           </ul>
         </div>
       </nav> 

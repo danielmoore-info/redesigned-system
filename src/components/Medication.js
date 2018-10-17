@@ -49,12 +49,14 @@ class Medication extends Component {
           loading: false,
           showSave: false,
           showEdit: false,
+          errorMsg: ''
         })
       }
     ).catch(err => {
       this.setState({
         loading: false,
-        error: true
+        error: true,
+        errorMsg: "Error when saving medication"
       })
     })
   }
@@ -126,7 +128,8 @@ class Medication extends Component {
     }).then(
       result => {
         this.setState({
-          loading: false
+          loading: false,
+          errorMsg: ''
         })
       }
     ).catch(err => {

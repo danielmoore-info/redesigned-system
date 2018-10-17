@@ -108,7 +108,6 @@ class MedicationList extends Component {
             <AddMedicationForm addMedication={this.addMedication} />
           ) : (null)}
           {this.props.medicationQuery.loading ? (
-            <div className="col-md-6 offset-md-3">
               <img
                 className="center-me"
                 height="100px"
@@ -118,7 +117,6 @@ class MedicationList extends Component {
                 }
                 alt="loading icon"
               />
-            </div>
           ) : (
             <CSSTransitionGroup transitionName="example" transitionEnterTimeout={700} transitionLeaveTimeout={700}>
             {this.props.medicationQuery.medications &&

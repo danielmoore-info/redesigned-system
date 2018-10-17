@@ -14,7 +14,8 @@ class Schedule extends Component {
       showAllMedications: false,
       showSave: false,
       showEdit: false,
-      loading: false
+      loading: false,
+      errorMsg: ''
     }
     this.showAllMedications = this.showAllMedications.bind(this)
     this.saveSchedule = this.saveSchedule.bind(this)
@@ -36,6 +37,9 @@ class Schedule extends Component {
 
   async deleteSchedule() {
     const id = this.props.id
+    this.setState({
+      loading:true
+    })
     this.props.deleteSchedule({
       variables: {
         id
@@ -52,12 +56,16 @@ class Schedule extends Component {
       }
     }).then(
       result => {
-        this.setState({ loading: false })
+        this.setState({ 
+          loading: false,
+          errorMsg: ''
+        })
       }
     ).catch(err => {
       this.setState({
         loading: false,
-        error: true
+        error: true,
+        errorMsg: 'Error when deleting schedule'
       })
     })
   }
@@ -99,13 +107,25 @@ class Schedule extends Component {
         this.setState({
           showSave: false,
           showEdit: false,
-          loading: false
+          loading: false,
+          errorMsg: ''
         })
+        if (result.ok) {
+          this.setState({
+            errorMsg: ''
+          })
+        }
+        else {
+          this.setState({
+            errorMsg:'Error when updating schedule'
+          })
+        }
       }
     ).catch(err => {
       console.log(err)
       this.setState({
-        loading:false
+        loading:false,
+        errorMsg:'Error when updating schedule'
       })
     })
   }
@@ -154,6 +174,9 @@ class Schedule extends Component {
               (
                 <div>
                   <div>
+                  {this.state.errorMsg && 
+                      <p className="error"><i class="fas fa-info-circle"></i> {this.state.errorMsg}</p>
+                  }
                     <h4>Schedule for hour {this.props.time}</h4>
                   </div>
                   <div id="button-bar" className="">
