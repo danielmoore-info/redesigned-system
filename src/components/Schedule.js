@@ -128,7 +128,7 @@ class Schedule extends Component {
   render() {
     return (
       <div className="col-md-4 margin-bottom">
-        <div className="list-card" onClick={this.toggleShowEdit}>
+        <div className="list-card">
           <div className="card-body">
             {this.state.loading ?
               (
@@ -142,19 +142,19 @@ class Schedule extends Component {
                     <h4>Schedule for hour {this.props.time}</h4>
                   </div>
                   <div id="button-bar" className="">
-                    <button className="btn list-card-button marone" onClick={this.deleteSchedule}>
+                    <button className="btn list-card-button btn-red" onClick={this.deleteSchedule}>
                       <i
                         className="fas fa-times"
                       ></i>
                     </button>
                     {!this.state.showSave ? (null) : (
-                      <button className="btn list-card-button off-green" onClick={this.saveSchedule}>
+                      <button className="btn list-card-button btn-green" onClick={this.saveSchedule}>
                         <i
                           className="fas fa-save"
                         ></i>
                       </button>
                     )}
-                    <button className="btn list-card-button" onClick={this.toggleShowEdit}>
+                    <button className="btn list-card-button btn-grey" onClick={this.toggleShowEdit}>
                       <i class="fas fa-chevron-down"></i>
                     </button>
                   </div>

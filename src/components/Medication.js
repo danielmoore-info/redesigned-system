@@ -134,7 +134,7 @@ class Medication extends Component {
   render() {
     return (
       <div className="col-md-4 margin-bottom">
-        <div className="list-card" onClick={this.toggleShowEdit}>
+        <div className="list-card">
           <div className="card-body">
             {this.state.loading ?
               (
@@ -151,19 +151,19 @@ class Medication extends Component {
                     <p>Currently assigned to dispenser {this.props.dispenser}</p>
                   </div>
                   <div id="button-bar" className="">
-                    <button className="btn list-card-button marone" onClick={this.deleteMedication}>
+                    <button className="btn list-card-button btn-red" onClick={this.deleteMedication}>
                       <i
                         className="fas fa-times"
                       ></i>
                     </button>
                     {!this.state.showSave ? (null) : (
-                      <button className="btn list-card-button off-green" onClick={this.saveMedication}>
+                      <button className="btn list-card-button btn-green" onClick={this.saveMedication}>
                         <i
                           className="fas fa-save"
                         ></i>
                       </button>
                     )}
-                    <button className="btn list-card-button" onClick={this.toggleShowEdit}>
+                    <button className="btn list-card-button btn-grey" onClick={this.toggleShowEdit}>
                       <i class="fas fa-chevron-down"></i>
                     </button>
                   </div>

@@ -27,6 +27,12 @@ class ScheduleList extends Component {
     })
   }
 
+  handleSearch(e) {
+    this.setState({
+      query: e.target.value
+    })
+  }
+
   addSchedule(time) {
     this.props.addSchedule({
       variables: {
@@ -57,36 +63,42 @@ class ScheduleList extends Component {
       <div className="container">
         <h1>Schedules</h1>
         <hr/>      
-        <div className="row function-card">
+        <div className="row margin-bottom function-card">
           <div className="col-md-6 offset-md-3">
             <button
               onClick={this.toggleScheduleForm}
-              className="btn list-card-button off-green margin-bottom"
+              className="btn list-card-button btn-green margin-bottom"
             >
               <i className="fas fa-plus"></i>
             </button>
+            <input
+              className="form-input-field"
+              type="text"
+              placeholder="Search..."
+              onChange={e => this.handleSearch(e)}
+            />            
           </div>
         </div>      
         <div className="row">
-        <div className={"col-md-6 offset-md-3 margin-bottom " + (showAddForm? '':'hide')}>
-          <div className={"list-card "}>
-            <div className="card-body">
-              <AddScheduleForm addSchedule={this.addSchedule} />
+          <div className={'col-md-6 offset-md-3 margin-bottom ' + (showAddForm? '':'hide')}>
+            <div className={'list-card'}>
+              <div className="card-body">
+                <AddScheduleForm addSchedule={this.addSchedule} />
+              </div>
             </div>
           </div>
-        </div>
-        <CSSTransitionGroup transitionName="example" transitionEnterTimeout={700} transitionLeaveTimeout={700}>
-          {this.props.scheduleQuery.schedules &&
-              this.props.scheduleQuery.schedules.map(schedule => 
-                <Schedule
-                  className=""
-                  key={schedule.id}
-                  {...schedule}
-                  all_medications = {this.props.medicationQuery.medications}
-                  token = {this.props.token}
-                />
-            )}
-        </CSSTransitionGroup>
+          <CSSTransitionGroup transitionName="example" transitionEnterTimeout={700} transitionLeaveTimeout={700}>
+            {this.props.scheduleQuery.schedules &&
+                this.props.scheduleQuery.schedules.map(schedule => 
+                  <Schedule
+                    className=""
+                    key={schedule.id}
+                    {...schedule}
+                    all_medications = {this.props.medicationQuery.medications}
+                    token = {this.props.token}
+                  />
+              )}
+          </CSSTransitionGroup>
         </div>
       </div>
     )

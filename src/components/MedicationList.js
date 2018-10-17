@@ -15,7 +15,6 @@ class MedicationList extends Component {
       medications: [],
       showAddForm: false,
       query: '',
-      patients: []
     }
     this.showMedicationForm = this.showMedicationForm.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
@@ -92,7 +91,7 @@ class MedicationList extends Component {
           <div className="col-md-6 offset-md-3">
             <button
               onClick={this.showMedicationForm}
-              className="btn list-card-button off-green margin-bottom"
+              className="btn list-card-button btn-green margin-bottom"
             >
               <i className="fas fa-plus"></i>
             </button>
