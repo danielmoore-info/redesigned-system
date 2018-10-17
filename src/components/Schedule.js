@@ -128,7 +128,7 @@ class Schedule extends Component {
   render() {
     return (
       <div className="col-md-4 margin-bottom">
-        <div className="list-card">
+        <div className="list-card" onClick={this.toggleShowEdit}>
           <div className="card-body">
             {this.state.loading ?
               (
