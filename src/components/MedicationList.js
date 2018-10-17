@@ -4,6 +4,7 @@ import AddMedicationForm from './AddMedicationForm'
 import { graphql, compose } from 'react-apollo'
 import { gql } from 'apollo-boost'
 import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup'
+const loader = require('../assets/spinner.svg')
 // import {API_ENDPOINT} from '../Constants'
 
 class MedicationList extends Component {
@@ -79,7 +80,6 @@ class MedicationList extends Component {
   }
 
   render() {
-    const { onNameChange } = this
     const { error, isLoaded, medications, showAddForm, query } = this.state
     const {subscribeToMore} = this.props.medicationQuery
     this._subsribeToChanges(subscribeToMore)
@@ -107,7 +107,20 @@ class MedicationList extends Component {
           {showAddForm ? (
             <AddMedicationForm addMedication={this.addMedication} />
           ) : (null)}
-          <CSSTransitionGroup transitionName="example" transitionEnterTimeout={700} transitionLeaveTimeout={700}>
+          {this.props.medicationQuery.loading ? (
+            <div className="col-md-6 offset-md-3">
+              <img
+                className="center-me"
+                height="100px"
+                width="100px"
+                src={
+                  loader
+                }
+                alt="loading icon"
+              />
+            </div>
+          ) : (
+            <CSSTransitionGroup transitionName="example" transitionEnterTimeout={700} transitionLeaveTimeout={700}>
             {this.props.medicationQuery.medications &&
               this.props.medicationQuery.medications.map(medication => {
                 return (medication.name.toLowerCase().search(query.toLowerCase()) !== -1) ?
@@ -122,6 +135,7 @@ class MedicationList extends Component {
               }
               )}
           </CSSTransitionGroup>
+          )}
         </div>
       </div>
     )

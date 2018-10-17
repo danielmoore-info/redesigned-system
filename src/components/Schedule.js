@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { graphql, compose } from 'react-apollo'
 import { gql } from 'apollo-boost'
-import Medication from './Medication'
+const loader = require('../assets/spinner.svg')
+
 
 class Schedule extends Component {
   constructor(props) {
@@ -12,7 +13,8 @@ class Schedule extends Component {
       medications: this.props.medications,
       showAllMedications: false,
       showSave: false,
-      showEdit: false
+      showEdit: false,
+      loading: false
     }
     this.showAllMedications = this.showAllMedications.bind(this)
     this.saveSchedule = this.saveSchedule.bind(this)
@@ -63,6 +65,9 @@ class Schedule extends Component {
   async saveSchedule(e) {
     const { id, time, medications } = this.state
     const token = this.props.token
+    this.setState({
+      loading:true
+    })
     const meds = medications.map(medication => {
       return (
         `{id: "${medication.id}"}`
@@ -93,11 +98,15 @@ class Schedule extends Component {
       result => {
         this.setState({
           showSave: false,
-          showEdit: false
+          showEdit: false,
+          loading: false
         })
       }
     ).catch(err => {
       console.log(err)
+      this.setState({
+        loading:false
+      })
     })
   }
 
@@ -132,9 +141,15 @@ class Schedule extends Component {
           <div className="card-body">
             {this.state.loading ?
               (
-                <div>
-                  <p>Loading</p>
-                </div>
+                <img
+                  className="center-me"
+                  height="100px"
+                  width="100px"
+                  alt="loading icon"
+                  src= {
+                    loader
+                  }
+                />
               ) :
               (
                 <div>

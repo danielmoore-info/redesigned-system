@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { graphql, compose } from 'react-apollo'
 import { gql } from 'apollo-boost'
+const loader = require('../assets/spinner.svg')
+
 
 class Medication extends Component {
   constructor(props) {
@@ -13,7 +15,8 @@ class Medication extends Component {
       count: this.props.count,
       dose: this.props.dose,
       dispenser: this.props.dispenser,
-      showEdit: false
+      showEdit: false,
+      loading: false,
     }
     this.deleteMedication = this.deleteMedication.bind(this)
     this.saveMedication = this.saveMedication.bind(this)
@@ -30,9 +33,9 @@ class Medication extends Component {
   saveMedication(e) {
     const { name, count, dose, dispenser } = this.state
     e.preventDefault()
-    // this.setState({
-    //   loading:true
-    // })
+    this.setState({
+      loading:true
+    })
     this.props.updateMedication({
       variables: {
         name,
@@ -102,6 +105,9 @@ class Medication extends Component {
 
   deleteMedication() {
     const id = this.props.id
+    this.setState({
+      loading: true
+    })
     this.props.deleteMedication({
       variables: {
         id
@@ -126,7 +132,8 @@ class Medication extends Component {
     ).catch(err => {
       this.setState({
         loading: false,
-        error: true
+        error: true,
+        errorMsg: 'Failed to delete medication'
       })
     })
   }
@@ -138,13 +145,22 @@ class Medication extends Component {
           <div className="card-body">
             {this.state.loading ?
               (
-                <div>
-                  <p>Loading</p>
-                </div>
+                <img
+                  className="center-me"
+                  height="100px"
+                  width="100px"
+                  alt="loading icon"
+                  src= {
+                    loader
+                  }
+                />
               ) :
               (
                 <div>
                   <div>
+                    {this.state.errorMsg && 
+                      <p className="error"><i class="fas fa-info-circle"></i> {this.state.errorMsg}</p>
+                    }
                     <h4>{this.props.name}</h4>
                     <p>{this.props.count} pills remaining</p>
                     <p>{this.props.dose} pills in each dose</p>

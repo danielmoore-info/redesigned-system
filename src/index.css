@@ -183,7 +183,7 @@ background-color: #2E2032;
 .example-leave.example-leave-active {
   opacity: 0.0;
   width: 100%;
-  transition: 1000ms;
+  transition: 100ms;
 }
 
 span {
@@ -241,6 +241,9 @@ h4 {
 
 .center-me{
   text-align: center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .btn-red {
@@ -260,4 +263,9 @@ h4 {
 .list-card-button:hover {
   background: #333;
   box-shadow: 0 -2px 0 3px #1a1a1a inset, 0 5px 5px rgba(0, 0, 0, 0.17), 0 15px rgba(255, 255, 255, 0.32) inset;
+}
+
+.error {
+  color: red;
+  font-size: 0.8rem;
 }
