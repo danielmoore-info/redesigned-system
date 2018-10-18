@@ -50,7 +50,7 @@ class MedicationList extends Component {
       update: (store, { data: { createMedication } }) => {
         const data = store.readQuery({ query: MEDICATION_QUERY })
         data.medications.unshift(createMedication)
-        store.writeQuery({query: MEDICATION_QUERY, data})
+        store.writeQuery({ query: MEDICATION_QUERY, data })
       }
     })
       .then(
@@ -81,12 +81,16 @@ class MedicationList extends Component {
 
   render() {
     const { error, isLoaded, medications, showAddForm, query } = this.state
-    const {subscribeToMore} = this.props.medicationQuery
+    const { subscribeToMore } = this.props.medicationQuery
     this._subsribeToChanges(subscribeToMore)
     return (
       <div className="container">
-        <h1>Medications</h1>
-        <hr/>
+        <div className="row center-me">
+          <div className="page-heading">
+            <h1>Medications</h1>
+            <hr />
+          </div>
+        </div>
         <div className="row margin-bottom function-card">
           <div className="col-md-6 offset-md-3">
             <button
@@ -108,32 +112,32 @@ class MedicationList extends Component {
             <AddMedicationForm addMedication={this.addMedication} />
           ) : (null)}
           {this.props.medicationQuery.loading ? (
-              <img
-                className="center-me"
-                height="100px"
-                width="100px"
-                src={
-                  loader
-                }
-                alt="loading icon"
-              />
-          ) : (
-            <CSSTransitionGroup transitionName="example" transitionEnterTimeout={700} transitionLeaveTimeout={700}>
-            {this.props.medicationQuery.medications &&
-              this.props.medicationQuery.medications.map(medication => {
-                return (medication.name.toLowerCase().search(query.toLowerCase()) !== -1) ?
-                  (
-                    <Medication
-                      key={medication.id} {...medication}
-                    />
-                  ) : (
-                    null
-                  )
-                // )
+            <img
+              className="center-me"
+              height="100px"
+              width="100px"
+              src={
+                loader
               }
-              )}
-          </CSSTransitionGroup>
-          )}
+              alt="loading icon"
+            />
+          ) : (
+              <CSSTransitionGroup transitionName="example" transitionEnterTimeout={700} transitionLeaveTimeout={700}>
+                {this.props.medicationQuery.medications &&
+                  this.props.medicationQuery.medications.map(medication => {
+                    return (medication.name.toLowerCase().search(query.toLowerCase()) !== -1) ?
+                      (
+                        <Medication
+                          key={medication.id} {...medication}
+                        />
+                      ) : (
+                        null
+                      )
+                    // )
+                  }
+                  )}
+              </CSSTransitionGroup>
+            )}
         </div>
       </div>
     )
