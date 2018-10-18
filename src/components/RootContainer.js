@@ -17,6 +17,7 @@ import PageNotFound from './PageNotFound'
 import LogoutPage from './LogoutPage'
 import MedicationList from './MedicationList'
 import ScheduleList from './ScheduleList'
+import LandingPage from './LandingPage'
 import { AUTH_TOKEN } from '../constant'
 import { isTokenExpired } from '../helper/jwtHelper'
 import { graphql } from 'react-apollo'
@@ -185,9 +186,9 @@ class RootContainer extends Component {
 
   renderRoute() {
     return (
-      <div className="fl w-100 pl4 pr4">
+      <div>
         <Switch>
-          <Route exact path="/" component={FeedPage} />
+          <Route exact path="/" component={LandingPage} />
           <ProtectedRoute
             token={this.state.token}
             path="/drafts"

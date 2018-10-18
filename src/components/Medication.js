@@ -9,8 +9,6 @@ class Medication extends Component {
     super(props)
     this.state = {
       showSave: false,
-      // showUsers: false,
-      // loading: false,
       name: this.props.name,
       count: this.props.count,
       dose: this.props.dose,
