@@ -107,66 +107,6 @@ class Schedule extends Component {
     )
   }
 
-  // async saveSchedule(e) {
-  //   const { id, time, medications } = this.state
-  //   const token = this.props.token
-  //   this.setState({
-  //     loading:true
-  //   })
-  //   const meds = medications.map(medication => {
-  //     return (
-  //       `{id: "${medication.id}"}`
-  //     )
-  //   })
-  //   const query = JSON.stringify({
-  //     query: `mutation {
-  //       updateSchedule(
-  //         id: "${id}"
-  //         time: ${time}
-  //         medications: [
-  //           ${meds}
-  //         ]                     
-  //       ){
-  //         id
-  //         time
-  //       }
-  //     }`
-  //   })
-  //   fetch('http://localhost:4000', {
-  //     method: 'POST',
-  //     body: query,
-  //     headers: {
-  //       'Authorization': 'Bearer ' + token,
-  //       'content-type': 'application/json'
-  //     }
-  //   }).then(
-  //     result => {
-  //       this.setState({
-  //         showSave: false,
-  //         showEdit: false,
-  //         loading: false,
-  //         errorMsg: ''
-  //       })
-  //       if (result.ok) {
-  //         this.setState({
-  //           errorMsg: ''
-  //         })
-  //       }
-  //       else {
-  //         this.setState({
-  //           errorMsg:'Error when updating schedule'
-  //         })
-  //       }
-  //     }
-  //   ).catch(err => {
-  //     console.log(err)
-  //     this.setState({
-  //       loading:false,
-  //       errorMsg:'Error when updating schedule'
-  //     })
-  //   })
-  // }
-
   updateTime(e) {
     this.setState({
       showSave: true
