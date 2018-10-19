@@ -50,7 +50,9 @@ const link = split(
   wsLink,
   httpLinkAuth,
 )
-const cache = new InMemoryCache()
+const cache = new InMemoryCache({
+  addTypename: false
+})
 // apollo client setup
 const client = new ApolloClient({
   link: ApolloLink.from([link]),

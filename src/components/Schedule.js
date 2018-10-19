@@ -72,63 +72,100 @@ class Schedule extends Component {
 
   async saveSchedule(e) {
     const { id, time, medications } = this.state
-    const token = this.props.token
+    const new_list = medications.map(medication => {
+      return {id:medication.id}
+    })
     this.setState({
-      loading:true
+      loading: true
     })
-    const meds = medications.map(medication => {
-      return (
-        `{id: "${medication.id}"}`
-      )
-    })
-    const query = JSON.stringify({
-      query: `mutation {
-        updateSchedule(
-          id: "${id}"
-          time: ${time}
-          medications: [
-            ${meds}
-          ]                     
-        ){
-          id
-          time
-        }
-      }`
-    })
-    fetch('http://localhost:4000', {
-      method: 'POST',
-      body: query,
-      headers: {
-        'Authorization': 'Bearer ' + token,
-        'content-type': 'application/json'
-      }
+    this.props.updateSchedule({
+      variables: {
+        id,
+        time,
+        medications: new_list,
+      },
+      // update: (store, {data: {updateSchedule}}) => {
+      //   const data = store.readQuery({query: SCHEDULE_QUERY})
+      //   data.schedules.unshift(updateSchedule)
+      //   store.writeQuery({query: SCHEDULE_QUERY, data})
+      // }
     }).then(
       result => {
         this.setState({
+          loading:false,
           showSave: false,
-          showEdit: false,
-          loading: false,
-          errorMsg: ''
+          errorMsg: '',
         })
-        if (result.ok) {
-          this.setState({
-            errorMsg: ''
-          })
-        }
-        else {
-          this.setState({
-            errorMsg:'Error when updating schedule'
-          })
-        }
       }
-    ).catch(err => {
-      console.log(err)
-      this.setState({
-        loading:false,
-        errorMsg:'Error when updating schedule'
-      })
-    })
+    ).catch(
+      err => {
+        this.setState({
+          loading:false,
+          errorMsg:'Error when updating schedule'
+        })
+      }
+    )
   }
+
+  // async saveSchedule(e) {
+  //   const { id, time, medications } = this.state
+  //   const token = this.props.token
+  //   this.setState({
+  //     loading:true
+  //   })
+  //   const meds = medications.map(medication => {
+  //     return (
+  //       `{id: "${medication.id}"}`
+  //     )
+  //   })
+  //   const query = JSON.stringify({
+  //     query: `mutation {
+  //       updateSchedule(
+  //         id: "${id}"
+  //         time: ${time}
+  //         medications: [
+  //           ${meds}
+  //         ]                     
+  //       ){
+  //         id
+  //         time
+  //       }
+  //     }`
+  //   })
+  //   fetch('http://localhost:4000', {
+  //     method: 'POST',
+  //     body: query,
+  //     headers: {
+  //       'Authorization': 'Bearer ' + token,
+  //       'content-type': 'application/json'
+  //     }
+  //   }).then(
+  //     result => {
+  //       this.setState({
+  //         showSave: false,
+  //         showEdit: false,
+  //         loading: false,
+  //         errorMsg: ''
+  //       })
+  //       if (result.ok) {
+  //         this.setState({
+  //           errorMsg: ''
+  //         })
+  //       }
+  //       else {
+  //         this.setState({
+  //           errorMsg:'Error when updating schedule'
+  //         })
+  //       }
+  //     }
+  //   ).catch(err => {
+  //     console.log(err)
+  //     this.setState({
+  //       loading:false,
+  //       errorMsg:'Error when updating schedule'
+  //     })
+  //   })
+  // }
 
   updateTime(e) {
     this.setState({
@@ -275,6 +312,22 @@ const SCHEDULE_QUERY = gql`
   }
 `
 
+const UPDATE_SCHEDULE_MUTATION = gql`
+  mutation UpdateScheduleMutation($id:ID!, $time:Int!, $medications:[MedicationIdInput]){
+    updateSchedule(id:$id, time:$time, medications:$medications){
+      id
+      time
+      medications {
+        id
+        name
+        count
+        dose
+        dispenser
+      }
+    }
+  }
+`
+
 const DELETE_SCHEDULE_MUTATION = gql`
   mutation DeleteScheduleMutation($id: ID!) {
     deleteSchedule(id: $id) {
@@ -283,9 +336,9 @@ const DELETE_SCHEDULE_MUTATION = gql`
   }
 `
 export default compose(
-  // graphql(UPDATE_SCHEDULE_MUTATION, {
-  //   name: 'updateSchedule'
-  // }),
+  graphql(UPDATE_SCHEDULE_MUTATION, {
+    name: 'updateSchedule'
+  }),
   graphql(DELETE_SCHEDULE_MUTATION, {
     name: 'deleteSchedule'
   })
