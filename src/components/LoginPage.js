@@ -3,11 +3,13 @@ import { withRouter } from 'react-router-dom'
 import { graphql } from 'react-apollo'
 import  { gql } from 'apollo-boost'
 import { AUTH_TOKEN } from '../constant'
+const loader = require('../assets/spinner.svg')
 
 class LoginPage extends Component {
   state = {
     email: '',
     password: '',
+    loading: false,
   }
 
   render() {
@@ -41,11 +43,23 @@ class LoginPage extends Component {
                 </div>
                 <div className="center-me">
                   <button
-                    className="btn special-button"
-                    // onClick={this._login}
+                    className="btn special-button margin-bottom"
                   >
-                    log in
+                    {this.state.loading ? (
+                    <img
+                      className="center-me"
+                      height="30px"
+                      width="30px"
+                      alt="loading icon"
+                      src= {
+                        loader
+                      }
+                    />
+                    ):('log in')}
                   </button>
+                  {this.state.error && 
+                    <p className='error'><i class="fas fa-info-circle"></i> {this.state.error}</p>
+                  }
                 </div>
               </form>
           </div>
@@ -57,6 +71,9 @@ class LoginPage extends Component {
   _login = async e => {
     e.preventDefault()
     const { email, password } = this.state
+    this.setState({
+      loading:true,
+    })
     this.props
       .loginMutation({
         variables: {
@@ -65,8 +82,10 @@ class LoginPage extends Component {
         },
       })
       .then(result => {
+        this.setState({
+          loading:false,
+        })
         const token = result.data.login.token
-
         this.props.refreshTokenFn &&
           this.props.refreshTokenFn({
             [AUTH_TOKEN]: token,
@@ -75,7 +94,10 @@ class LoginPage extends Component {
         window.location.reload()
       })
       .catch(err => {
-        console.log('error')
+        this.setState({
+          loading:false,
+          error: 'Failed to login'
+        })
       })
   }
 }
