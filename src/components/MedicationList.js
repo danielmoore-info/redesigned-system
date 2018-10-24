@@ -5,7 +5,6 @@ import { graphql, compose } from 'react-apollo'
 import { gql } from 'apollo-boost'
 import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup'
 const loader = require('../assets/spinner.svg')
-// import {API_ENDPOINT} from '../Constants'
 
 class MedicationList extends Component {
   constructor(props) {

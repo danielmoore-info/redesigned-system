@@ -18,6 +18,7 @@ import LogoutPage from './LogoutPage'
 import MedicationList from './MedicationList'
 import ScheduleList from './ScheduleList'
 import LandingPage from './LandingPage'
+import Home from './Home'
 import { AUTH_TOKEN } from '../constant'
 import { isTokenExpired } from '../helper/jwtHelper'
 import { graphql } from 'react-apollo'
@@ -193,6 +194,11 @@ class RootContainer extends Component {
             token={this.state.token}
             path="/drafts"
             component={DraftsPage}
+          />
+          <ProtectedRoute
+            token={this.state.token}
+            path="/home"
+            component={Home}
           />
           <ProtectedRoute
             token={this.state.token}
