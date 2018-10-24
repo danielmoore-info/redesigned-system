@@ -180,20 +180,20 @@ class Medication extends Component {
                     <p>{this.props.count} pills remaining</p>
                     <p>{this.props.dose} pills in each dose</p>
                     <p>Currently assigned to dispenser {this.props.dispenser}</p>
-                    <div id="button-bar" className="">
-                      <button className="btn list-card-button btn-red" onClick={this.deleteMedication}>
+                  </div>
+                  <div id="button-bar" className="">
+                    <button className="btn list-card-button btn-red" onClick={this.deleteMedication}>
+                      <i
+                        className="fas fa-times"
+                      ></i>
+                    </button>
+                    {!this.state.showSave ? (null) : (
+                      <button className="btn list-card-button btn-green" onClick={this.saveMedication}>
                         <i
-                          className="fas fa-times"
+                          className="fas fa-save"
                         ></i>
                       </button>
-                      {!this.state.showSave ? (null) : (
-                        <button className="btn list-card-button btn-green" onClick={this.saveMedication}>
-                          <i
-                            className="fas fa-save"
-                          ></i>
-                        </button>
-                      )}
-                    </div>
+                    )}
                   </div>
                   {this.state.showEdit ? (
                     <div>
