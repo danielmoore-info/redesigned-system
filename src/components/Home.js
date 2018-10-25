@@ -9,20 +9,40 @@ class Home extends Component {
     this.state = {
 
     }
-    // 
+    //
+    this.consumeSchedule = this.consumeSchedule.bind(this)
+  }
+
+  consumeSchedule(e, id) {
+    e.preventDefault()
+    const d = new Date()
+    const takenTime = d.toISOString()
+    this.props.updateSchedule({
+      variables: {
+        id,
+        takenTime
+      },
+    }).then(
+      result => {
+        this.setState({
+          loading:false
+        })
+      }
+    ).catch(
+      err => {
+        this.setState({
+          loading:false
+        })
+        console.log(err)
+      }
+    )
   }
 
   render() {
-    // const { takenTime } = this.props.scheduleQuery.sc
     const d = new Date()
     const current_hour = d.getHours()
     const current_month = d.getUTCMonth()
     const current_day = d.getUTCDate()
-    // const takenDate = new Date(takenTime)
-    // const taken_month = takenDate.getUTCMonth()
-    // const taken_day = takenDate.getUTCDate()
-    // console.log(taken_day)
-    // console.log(current_day)
     return (
       <div className='container'>
         <h1>Feed</h1>
@@ -43,9 +63,14 @@ class Home extends Component {
                   <div key={schedule.id} className='list-card margin-bottom'>
                     <div className='card-body'>
                       <ScheduleSummary
-                        // key={schedule.id}
                         {...schedule}
                       />
+                      <button 
+                        className="btn list-card-button btn-green"
+                        onClick={(e) => this.consumeSchedule(e, schedule.id)}  
+                      >
+                        <i className="fas fa-check"></i>
+                      </button>
                     </div>
                   </div>
                   ) : (null)
@@ -81,8 +106,27 @@ const SCHEDULE_QUERY = gql`
     }
   }
 `
+const UPDATE_SCHEDULE_MUTATION = gql`
+  mutation UpdateScheduleMutation($id:ID!, $time:Int, $medications:[MedicationIdInput], $takenTime:DateTime){
+    updateSchedule(id:$id, time:$time, medications:$medications, takenTime:$takenTime){
+      id
+      time
+      medications {
+        id
+        name
+        count
+        dose
+        dispenser
+      }
+      takenTime
+    }
+  }
+`
 export default compose(
   graphql(SCHEDULE_QUERY, {
     name: 'scheduleQuery',
+  }),
+  graphql(UPDATE_SCHEDULE_MUTATION, {
+    name: 'updateSchedule',
   }),
 )(Home)

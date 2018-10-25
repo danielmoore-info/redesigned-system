@@ -109,6 +109,18 @@ class RootContainer extends Component {
         </button>
         <div className={`${classOne}`} id="navbarNav">
           <ul className="navbar-nav">
+          {this.state.token ? (
+            <li className="nav-item">
+              <NavLink
+                to="/home"
+                className="nav-link"
+                activeClassName="active"
+                exact={true}
+              >
+                Home
+              </NavLink>
+            </li>
+          ):(null)}
             {this.state.token ? (
               <li className="nav-item">
                 <NavLink
