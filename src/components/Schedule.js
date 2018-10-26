@@ -162,20 +162,20 @@ class Schedule extends Component {
                       <p className="error"><i class="fas fa-info-circle"></i> {this.state.errorMsg}</p>
                     }
                     <h4>{this.props.time}:00</h4>
-                    <div id="button-bar" className="">
-                      <button className="btn list-card-button btn-red" onClick={this.deleteSchedule}>
+                  </div>
+                  <div id="button-bar" className="">
+                    <button className="btn list-card-button btn-red" onClick={this.deleteSchedule}>
+                      <i
+                        className="fas fa-times"
+                      ></i>
+                    </button>
+                    {!this.state.showSave ? (null) : (
+                      <button className="btn list-card-button btn-green" onClick={this.saveSchedule}>
                         <i
-                          className="fas fa-times"
+                          className="fas fa-save"
                         ></i>
                       </button>
-                      {!this.state.showSave ? (null) : (
-                        <button className="btn list-card-button btn-green" onClick={this.saveSchedule}>
-                          <i
-                            className="fas fa-save"
-                          ></i>
-                        </button>
-                      )}
-                    </div>
+                    )}
                   </div>
                   {this.state.showEdit ? (
                     <div>

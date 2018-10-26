@@ -22,6 +22,17 @@ class Home extends Component {
         id,
         takenTime
       },
+      update: (store, {data: {updateSchedule}}) => {
+        const data = store.readQuery({query: SCHEDULE_QUERY})
+        const x = data.schedules.map(schedule => 
+          (schedule.id != id) ?
+          schedule : {
+            ...updateSchedule
+          }
+        )
+        data.schedules = x
+        store.writeQuery({query: SCHEDULE_QUERY, data})
+      }
     }).then(
       result => {
         this.setState({
@@ -79,7 +90,7 @@ class Home extends Component {
             }
           </div>
           <div className='col-lg-4'>
-
+            <h5>Notifications</h5>
           </div>
           <div className='col-lg-4'>
 
