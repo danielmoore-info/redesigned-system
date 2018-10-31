@@ -45,7 +45,6 @@ const medication = {
   },
 
   async updatePatientMedication(parent, {id, name, count, dispenser, dose, patientId}, ctx, info){
-    const userId = getUserId(ctx)
     const medicationExists = await ctx.db.exists.Medication({
       id,
       patient: {

@@ -16,6 +16,7 @@ type User {
   posts: [Post!]!
   medications: [Medication!]!
   schedules: [Schedule!]!
+  notifications: [Notification!]!
 }
 
 type Medication {
@@ -35,4 +36,11 @@ type Schedule {
   patient: User!
   medications: [Medication!]!
   takenTime: DateTime
+}
+
+type Notification {
+  id: ID! @unique
+  type: String!
+  message: String!
+  user: User!
 }

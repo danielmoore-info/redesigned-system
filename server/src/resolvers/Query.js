@@ -63,6 +63,18 @@ const Query = {
       where,
       orderBy:'time_ASC'
     }, info)
+  },
+
+  notifications(parent, args, ctx, info) {
+    const id = getUserId(ctx)
+    const where = {
+      user: {
+        id
+      }
+    }
+    return ctx.db.query.notifications({
+      where
+    }, info)
   }
 }
 

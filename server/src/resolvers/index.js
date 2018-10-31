@@ -5,6 +5,7 @@ const { post } = require('./Mutation/post')
 const {medication} = require('./Mutation/medication')
 const {schedule} = require('./Mutation/schedule')
 const { AuthPayload } = require('./AuthPayload')
+const {notification} = require('./Mutation/notification')
 
 module.exports = {
   Query,
@@ -13,6 +14,7 @@ module.exports = {
     ...post,
     ...medication,
     ...schedule,
+    ...notification,
   },
   Subscription,
   AuthPayload,

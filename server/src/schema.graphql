@@ -1,4 +1,4 @@
-# import Post, Medication, Schedule, MedicationSubscriptionPayload from "./generated/prisma.graphql"
+# import Post, Notification, Medication, Schedule, MedicationSubscriptionPayload from "./generated/prisma.graphql"
 
 type Query {
   feed: [Post!]!
@@ -8,6 +8,7 @@ type Query {
   medications: [Medication!]!
   schedules: [Schedule!]!
   userSchedules(id:ID!): [Schedule!]!
+  notifications:  [Notification!]!
 }
 
 input MedicationIdInput {
@@ -28,6 +29,8 @@ type Mutation {
   updateSchedule(id: ID!, time: Int, medications:[MedicationIdInput], takenTime:DateTime): Schedule!
   updatePatientSchedule(id: ID!, time: Int, takenTime:DateTime, patientId:ID!): Schedule!
   deleteSchedule(id: ID!): Schedule!
+  deleteNotification(id: ID!): Notification!
+  createNotification(type: String!, message: String!): Notification!
 }
 
 type Subscription {

@@ -1,7 +1,11 @@
 # source: http://prisma:4466
-# timestamp: Tue Oct 16 2018 23:46:32 GMT+0000 (UTC)
+# timestamp: Wed Oct 31 2018 06:44:54 GMT+0000 (UTC)
 
 type AggregateMedication {
+  count: Int!
+}
+
+type AggregateNotification {
   count: Int!
 }
 
@@ -393,26 +397,32 @@ type Mutation {
   createUser(data: UserCreateInput!): User!
   createMedication(data: MedicationCreateInput!): Medication!
   createSchedule(data: ScheduleCreateInput!): Schedule!
+  createNotification(data: NotificationCreateInput!): Notification!
   updatePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateMedication(data: MedicationUpdateInput!, where: MedicationWhereUniqueInput!): Medication
   updateSchedule(data: ScheduleUpdateInput!, where: ScheduleWhereUniqueInput!): Schedule
+  updateNotification(data: NotificationUpdateInput!, where: NotificationWhereUniqueInput!): Notification
   deletePost(where: PostWhereUniqueInput!): Post
   deleteUser(where: UserWhereUniqueInput!): User
   deleteMedication(where: MedicationWhereUniqueInput!): Medication
   deleteSchedule(where: ScheduleWhereUniqueInput!): Schedule
+  deleteNotification(where: NotificationWhereUniqueInput!): Notification
   upsertPost(where: PostWhereUniqueInput!, create: PostCreateInput!, update: PostUpdateInput!): Post!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   upsertMedication(where: MedicationWhereUniqueInput!, create: MedicationCreateInput!, update: MedicationUpdateInput!): Medication!
   upsertSchedule(where: ScheduleWhereUniqueInput!, create: ScheduleCreateInput!, update: ScheduleUpdateInput!): Schedule!
+  upsertNotification(where: NotificationWhereUniqueInput!, create: NotificationCreateInput!, update: NotificationUpdateInput!): Notification!
   updateManyPosts(data: PostUpdateInput!, where: PostWhereInput): BatchPayload!
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
   updateManyMedications(data: MedicationUpdateInput!, where: MedicationWhereInput): BatchPayload!
   updateManySchedules(data: ScheduleUpdateInput!, where: ScheduleWhereInput): BatchPayload!
+  updateManyNotifications(data: NotificationUpdateInput!, where: NotificationWhereInput): BatchPayload!
   deleteManyPosts(where: PostWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   deleteManyMedications(where: MedicationWhereInput): BatchPayload!
   deleteManySchedules(where: ScheduleWhereInput): BatchPayload!
+  deleteManyNotifications(where: NotificationWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -425,6 +435,273 @@ enum MutationType {
 interface Node {
   """The id of the object."""
   id: ID!
+}
+
+type Notification implements Node {
+  id: ID!
+  type: String!
+  message: String!
+  user(where: UserWhereInput): User!
+}
+
+"""A connection to a list of items."""
+type NotificationConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [NotificationEdge]!
+  aggregate: AggregateNotification!
+}
+
+input NotificationCreateInput {
+  type: String!
+  message: String!
+  user: UserCreateOneWithoutNotificationsInput!
+}
+
+input NotificationCreateManyWithoutUserInput {
+  create: [NotificationCreateWithoutUserInput!]
+  connect: [NotificationWhereUniqueInput!]
+}
+
+input NotificationCreateWithoutUserInput {
+  type: String!
+  message: String!
+}
+
+"""An edge in a connection."""
+type NotificationEdge {
+  """The item at the end of the edge."""
+  node: Notification!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum NotificationOrderByInput {
+  id_ASC
+  id_DESC
+  type_ASC
+  type_DESC
+  message_ASC
+  message_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type NotificationPreviousValues {
+  id: ID!
+  type: String!
+  message: String!
+}
+
+type NotificationSubscriptionPayload {
+  mutation: MutationType!
+  node: Notification
+  updatedFields: [String!]
+  previousValues: NotificationPreviousValues
+}
+
+input NotificationSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [NotificationSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [NotificationSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [NotificationSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: NotificationWhereInput
+}
+
+input NotificationUpdateInput {
+  type: String
+  message: String
+  user: UserUpdateOneWithoutNotificationsInput
+}
+
+input NotificationUpdateManyWithoutUserInput {
+  create: [NotificationCreateWithoutUserInput!]
+  connect: [NotificationWhereUniqueInput!]
+  disconnect: [NotificationWhereUniqueInput!]
+  delete: [NotificationWhereUniqueInput!]
+  update: [NotificationUpdateWithWhereUniqueWithoutUserInput!]
+  upsert: [NotificationUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input NotificationUpdateWithoutUserDataInput {
+  type: String
+  message: String
+}
+
+input NotificationUpdateWithWhereUniqueWithoutUserInput {
+  where: NotificationWhereUniqueInput!
+  data: NotificationUpdateWithoutUserDataInput!
+}
+
+input NotificationUpsertWithWhereUniqueWithoutUserInput {
+  where: NotificationWhereUniqueInput!
+  update: NotificationUpdateWithoutUserDataInput!
+  create: NotificationCreateWithoutUserInput!
+}
+
+input NotificationWhereInput {
+  """Logical AND on all given filters."""
+  AND: [NotificationWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [NotificationWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [NotificationWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  type: String
+
+  """All values that are not equal to given value."""
+  type_not: String
+
+  """All values that are contained in given list."""
+  type_in: [String!]
+
+  """All values that are not contained in given list."""
+  type_not_in: [String!]
+
+  """All values less than the given value."""
+  type_lt: String
+
+  """All values less than or equal the given value."""
+  type_lte: String
+
+  """All values greater than the given value."""
+  type_gt: String
+
+  """All values greater than or equal the given value."""
+  type_gte: String
+
+  """All values containing the given string."""
+  type_contains: String
+
+  """All values not containing the given string."""
+  type_not_contains: String
+
+  """All values starting with the given string."""
+  type_starts_with: String
+
+  """All values not starting with the given string."""
+  type_not_starts_with: String
+
+  """All values ending with the given string."""
+  type_ends_with: String
+
+  """All values not ending with the given string."""
+  type_not_ends_with: String
+  message: String
+
+  """All values that are not equal to given value."""
+  message_not: String
+
+  """All values that are contained in given list."""
+  message_in: [String!]
+
+  """All values that are not contained in given list."""
+  message_not_in: [String!]
+
+  """All values less than the given value."""
+  message_lt: String
+
+  """All values less than or equal the given value."""
+  message_lte: String
+
+  """All values greater than the given value."""
+  message_gt: String
+
+  """All values greater than or equal the given value."""
+  message_gte: String
+
+  """All values containing the given string."""
+  message_contains: String
+
+  """All values not containing the given string."""
+  message_not_contains: String
+
+  """All values starting with the given string."""
+  message_starts_with: String
+
+  """All values not starting with the given string."""
+  message_not_starts_with: String
+
+  """All values ending with the given string."""
+  message_ends_with: String
+
+  """All values not ending with the given string."""
+  message_not_ends_with: String
+  user: UserWhereInput
+}
+
+input NotificationWhereUniqueInput {
+  id: ID
 }
 
 """Information about pagination in a connection."""
@@ -774,14 +1051,17 @@ type Query {
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   medications(where: MedicationWhereInput, orderBy: MedicationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Medication]!
   schedules(where: ScheduleWhereInput, orderBy: ScheduleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Schedule]!
+  notifications(where: NotificationWhereInput, orderBy: NotificationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Notification]!
   post(where: PostWhereUniqueInput!): Post
   user(where: UserWhereUniqueInput!): User
   medication(where: MedicationWhereUniqueInput!): Medication
   schedule(where: ScheduleWhereUniqueInput!): Schedule
+  notification(where: NotificationWhereUniqueInput!): Notification
   postsConnection(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   medicationsConnection(where: MedicationWhereInput, orderBy: MedicationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MedicationConnection!
   schedulesConnection(where: ScheduleWhereInput, orderBy: ScheduleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ScheduleConnection!
+  notificationsConnection(where: NotificationWhereInput, orderBy: NotificationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): NotificationConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -1071,6 +1351,7 @@ type Subscription {
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   medication(where: MedicationSubscriptionWhereInput): MedicationSubscriptionPayload
   schedule(where: ScheduleSubscriptionWhereInput): ScheduleSubscriptionPayload
+  notification(where: NotificationSubscriptionWhereInput): NotificationSubscriptionPayload
 }
 
 type User implements Node {
@@ -1081,6 +1362,7 @@ type User implements Node {
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
   medications(where: MedicationWhereInput, orderBy: MedicationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Medication!]
   schedules(where: ScheduleWhereInput, orderBy: ScheduleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Schedule!]
+  notifications(where: NotificationWhereInput, orderBy: NotificationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Notification!]
 }
 
 """A connection to a list of items."""
@@ -1100,10 +1382,16 @@ input UserCreateInput {
   posts: PostCreateManyWithoutAuthorInput
   medications: MedicationCreateManyWithoutPatientInput
   schedules: ScheduleCreateManyWithoutPatientInput
+  notifications: NotificationCreateManyWithoutUserInput
 }
 
 input UserCreateOneWithoutMedicationsInput {
   create: UserCreateWithoutMedicationsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutNotificationsInput {
+  create: UserCreateWithoutNotificationsInput
   connect: UserWhereUniqueInput
 }
 
@@ -1123,6 +1411,16 @@ input UserCreateWithoutMedicationsInput {
   name: String!
   posts: PostCreateManyWithoutAuthorInput
   schedules: ScheduleCreateManyWithoutPatientInput
+  notifications: NotificationCreateManyWithoutUserInput
+}
+
+input UserCreateWithoutNotificationsInput {
+  email: String!
+  password: String!
+  name: String!
+  posts: PostCreateManyWithoutAuthorInput
+  medications: MedicationCreateManyWithoutPatientInput
+  schedules: ScheduleCreateManyWithoutPatientInput
 }
 
 input UserCreateWithoutPostsInput {
@@ -1131,6 +1429,7 @@ input UserCreateWithoutPostsInput {
   name: String!
   medications: MedicationCreateManyWithoutPatientInput
   schedules: ScheduleCreateManyWithoutPatientInput
+  notifications: NotificationCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutSchedulesInput {
@@ -1139,6 +1438,7 @@ input UserCreateWithoutSchedulesInput {
   name: String!
   posts: PostCreateManyWithoutAuthorInput
   medications: MedicationCreateManyWithoutPatientInput
+  notifications: NotificationCreateManyWithoutUserInput
 }
 
 """An edge in a connection."""
@@ -1218,6 +1518,7 @@ input UserUpdateInput {
   posts: PostUpdateManyWithoutAuthorInput
   medications: MedicationUpdateManyWithoutPatientInput
   schedules: ScheduleUpdateManyWithoutPatientInput
+  notifications: NotificationUpdateManyWithoutUserInput
 }
 
 input UserUpdateOneWithoutMedicationsInput {
@@ -1226,6 +1527,14 @@ input UserUpdateOneWithoutMedicationsInput {
   delete: Boolean
   update: UserUpdateWithoutMedicationsDataInput
   upsert: UserUpsertWithoutMedicationsInput
+}
+
+input UserUpdateOneWithoutNotificationsInput {
+  create: UserCreateWithoutNotificationsInput
+  connect: UserWhereUniqueInput
+  delete: Boolean
+  update: UserUpdateWithoutNotificationsDataInput
+  upsert: UserUpsertWithoutNotificationsInput
 }
 
 input UserUpdateOneWithoutPostsInput {
@@ -1250,6 +1559,16 @@ input UserUpdateWithoutMedicationsDataInput {
   name: String
   posts: PostUpdateManyWithoutAuthorInput
   schedules: ScheduleUpdateManyWithoutPatientInput
+  notifications: NotificationUpdateManyWithoutUserInput
+}
+
+input UserUpdateWithoutNotificationsDataInput {
+  email: String
+  password: String
+  name: String
+  posts: PostUpdateManyWithoutAuthorInput
+  medications: MedicationUpdateManyWithoutPatientInput
+  schedules: ScheduleUpdateManyWithoutPatientInput
 }
 
 input UserUpdateWithoutPostsDataInput {
@@ -1258,6 +1577,7 @@ input UserUpdateWithoutPostsDataInput {
   name: String
   medications: MedicationUpdateManyWithoutPatientInput
   schedules: ScheduleUpdateManyWithoutPatientInput
+  notifications: NotificationUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutSchedulesDataInput {
@@ -1266,11 +1586,17 @@ input UserUpdateWithoutSchedulesDataInput {
   name: String
   posts: PostUpdateManyWithoutAuthorInput
   medications: MedicationUpdateManyWithoutPatientInput
+  notifications: NotificationUpdateManyWithoutUserInput
 }
 
 input UserUpsertWithoutMedicationsInput {
   update: UserUpdateWithoutMedicationsDataInput!
   create: UserCreateWithoutMedicationsInput!
+}
+
+input UserUpsertWithoutNotificationsInput {
+  update: UserUpdateWithoutNotificationsDataInput!
+  create: UserCreateWithoutNotificationsInput!
 }
 
 input UserUpsertWithoutPostsInput {
@@ -1461,6 +1787,9 @@ input UserWhereInput {
   schedules_every: ScheduleWhereInput
   schedules_some: ScheduleWhereInput
   schedules_none: ScheduleWhereInput
+  notifications_every: NotificationWhereInput
+  notifications_some: NotificationWhereInput
+  notifications_none: NotificationWhereInput
 }
 
 input UserWhereUniqueInput {
