@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { graphql, compose } from 'react-apollo'
 import { gql } from 'apollo-boost'
 import ScheduleSummary from './ScheduleSummary'
+import Medication from './Medication';
 
 class Home extends Component {
   constructor(props) {
@@ -11,6 +12,7 @@ class Home extends Component {
     }
     //
     this.consumeSchedule = this.consumeSchedule.bind(this)
+    this.deleteNotification = this.deleteNotification.bind(this)
   }
 
   consumeSchedule(e, id) {
@@ -25,7 +27,7 @@ class Home extends Component {
       update: (store, {data: {updateSchedule}}) => {
         const data = store.readQuery({query: SCHEDULE_QUERY})
         const x = data.schedules.map(schedule => 
-          (schedule.id != id) ?
+          (schedule.id !== id) ?
           schedule : {
             ...updateSchedule
           }
@@ -47,6 +49,25 @@ class Home extends Component {
         console.log(err)
       }
     )
+  }
+
+  deleteNotification(e, id) {
+    e.preventDefault()
+    this.props.deleteNotification({
+      variables: {
+        id
+      },
+      update: (store, {data: {deleteNotification}}) => {
+        const data = store.readQuery({query: NOTIFICATION_QUERY})
+        const new_data = data.notifications.filter(
+          notification => {
+            return notification.id !==id
+          }
+        )
+        data.notifications = new_data
+        store.writeQuery({ query: NOTIFICATION_QUERY, data})
+      }
+    })
   }
 
   render() {
@@ -91,6 +112,19 @@ class Home extends Component {
           </div>
           <div className='col-lg-4'>
             <h5>Notifications</h5>
+            {this.props.notificationQuery.notifications &&
+              this.props.notificationQuery.notifications.map(notification => 
+                <div 
+                  key={notification.id} 
+                  className={'list-card margin-bottom '+ notification.type}
+                  onClick={(e) => this.deleteNotification(e, notification.id)}
+                >
+                  <div className="card-body">
+                    <p>{notification.message}</p>
+                  </div>
+                </div>  
+              )
+            }
           </div>
           <div className='col-lg-4'>
 
@@ -117,6 +151,16 @@ const SCHEDULE_QUERY = gql`
     }
   }
 `
+
+const NOTIFICATION_QUERY = gql`
+  query NotificationQuery {
+    notifications{
+      id
+      type
+      message
+    }
+  }
+`
 const UPDATE_SCHEDULE_MUTATION = gql`
   mutation UpdateScheduleMutation($id:ID!, $time:Int, $medications:[MedicationIdInput], $takenTime:DateTime){
     updateSchedule(id:$id, time:$time, medications:$medications, takenTime:$takenTime){
@@ -133,11 +177,27 @@ const UPDATE_SCHEDULE_MUTATION = gql`
     }
   }
 `
+
+const DELETE_NOTIFICATION_MUTATION = gql`
+  mutation DeleteNotification($id:ID!){
+    deleteNotification(id:$id){
+      id
+      type
+      message
+    }
+  }
+`
 export default compose(
   graphql(SCHEDULE_QUERY, {
     name: 'scheduleQuery',
   }),
   graphql(UPDATE_SCHEDULE_MUTATION, {
     name: 'updateSchedule',
+  }),
+  graphql(NOTIFICATION_QUERY, {
+    name: 'notificationQuery',
+  }),
+  graphql(DELETE_NOTIFICATION_MUTATION, {
+    name: 'deleteNotification',
   }),
 )(Home)

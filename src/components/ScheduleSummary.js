@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-import { graphql, compose } from 'react-apollo'
-import { gql } from 'apollo-boost'
 export default class ScheduleSummary extends Component {
   constructor(props) {
     super(props)

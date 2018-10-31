@@ -1,13 +1,11 @@
 import React, { Component, Fragment } from 'react'
 import {
   NavLink,
-  Link,
   BrowserRouter as Router,
   Route,
   Switch,
   Redirect,
 } from 'react-router-dom'
-import FeedPage from './FeedPage'
 import DraftsPage from './DraftsPage'
 import CreatePage from './CreatePage'
 import DetailPage from './DetailPage'

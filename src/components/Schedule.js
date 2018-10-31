@@ -87,7 +87,7 @@ class Schedule extends Component {
       update: (store, { data: { updateSchedule } }) => {
         const data = store.readQuery({ query: SCHEDULE_QUERY })
         const x = data.schedules.map(schedule =>
-          (schedule.id != id) ?
+          (schedule.id !== id) ?
             schedule : {
               ...updateSchedule
             }

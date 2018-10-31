@@ -45,7 +45,7 @@ class Medication extends Component {
       update: (store, { data: { updateMedication } }) => {
         const data = store.readQuery({ query: MEDICATION_QUERY })
         const x = data.medications.map(medication =>
-          (medication.id != id) ?
+          (medication.id !== id) ?
             medication : {
               ...updateMedication
             }

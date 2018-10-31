@@ -79,7 +79,7 @@ class MedicationList extends Component {
   }
 
   render() {
-    const { error, isLoaded, medications, showAddForm, query } = this.state
+    const { showAddForm, query } = this.state
     const { subscribeToMore } = this.props.medicationQuery
     this._subsribeToChanges(subscribeToMore)
     return (

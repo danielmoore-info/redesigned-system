@@ -1,4 +1,4 @@
-import  React, {Component} from 'react'
+import  React from 'react'
 
 const AddMedicationForm = ({addMedication=f=>f}) => {
   let _name, _count, _dose, _dispenser
